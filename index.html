@@ -44,6 +44,19 @@
             --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.3);
             --grid-color: rgba(42, 79, 107, 0.08);
             --grid-light: rgba(42, 79, 107, 0.06);
+
+            /* Cabeçalhos escuros (mesmo em modo claro) */
+            --header-bg:
+                linear-gradient(180deg,
+                    rgba(255,255,255,0.14) 0%,
+                    rgba(255,255,255,0.02) 35%,
+                    rgba(0,0,0,0.15) 100%),
+                linear-gradient(135deg, #1c4767 0%, #0D2E4A 50%, #08243a 100%);
+            --header-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.20),
+                inset 0 -1px 0 rgba(0, 229, 255, 0.28),
+                0 4px 14px rgba(13, 46, 74, 0.30),
+                0 0 0 1px rgba(0,0,0,0.2);
         }
 
         body.theme-dark {
@@ -361,30 +374,81 @@
             margin-bottom: 16px; padding-left: 2px;
             transition: color 0.4s ease;
         }
-        .panel-subtitle-row {
+
+        /* ============================================================
+           CABEÇALHOS ESCUROS METÁLICOS — aplicados em todas as telas
+           ============================================================ */
+        .panel-subtitle-row,
+        .panel-subtitle-bar {
             display: flex; align-items: center; justify-content: space-between;
-            gap: 18px; margin-bottom: 14px; flex-wrap: wrap;
+            gap: 18px; flex-wrap: wrap;
+            background: var(--header-bg);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            box-shadow: var(--header-shadow);
+            border: 1px solid rgba(0, 0, 0, 0.28);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
         }
-        .panel-subtitle-row .panel-subtitle { margin-bottom: 0; }
+        .panel-subtitle-row::after,
+        .panel-subtitle-bar::after {
+            content: '';
+            position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.6), transparent);
+            pointer-events: none;
+        }
+        .panel-subtitle-row .panel-subtitle,
+        .panel-subtitle-bar .panel-subtitle {
+            margin-bottom: 0;
+            background: transparent;
+            color: #ffffff;
+            padding: 6px 14px;
+            border-left: 3px solid var(--neon-azul);
+            border-radius: 4px;
+            font-size: 11.5px;
+            letter-spacing: 1.1px;
+            white-space: nowrap;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+            box-shadow: none;
+            transition: all 0.3s ease;
+        }
+
+        /* Subtitle marquee — mantido, já é escuro */
         .subtitle-marquee {
             flex: 1; min-width: 280px; max-width: 640px;
             overflow: hidden; position: relative;
             padding: 9px 14px;
             border-radius: 8px;
-            background: linear-gradient(90deg, rgba(0, 229, 255, 0.10) 0%, rgba(0, 229, 255, 0.02) 100%);
+            background:
+                linear-gradient(180deg,
+                    rgba(255,255,255,0.16) 0%,
+                    rgba(255,255,255,0.03) 35%,
+                    rgba(0,0,0,0.28) 100%),
+                linear-gradient(135deg, #1f4a6b 0%, #0D2E4A 45%, #071f33 80%, #031320 100%);
             border-left: 3px solid var(--neon-azul);
             box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.5),
-                0 2px 10px rgba(0, 229, 255, 0.12);
+                inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                inset 0 -1px 0 rgba(0, 229, 255, 0.40),
+                0 3px 14px rgba(13, 46, 74, 0.45),
+                0 0 22px rgba(0, 229, 255, 0.18);
             -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
             mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
             transition: all 0.4s ease;
         }
         body.theme-dark .subtitle-marquee {
-            background: linear-gradient(90deg, rgba(0, 229, 255, 0.14) 0%, rgba(0, 229, 255, 0.03) 100%);
+            background:
+                linear-gradient(180deg,
+                    rgba(255,255,255,0.14) 0%,
+                    rgba(255,255,255,0.03) 35%,
+                    rgba(0,0,0,0.32) 100%),
+                linear-gradient(135deg, #1f4a6b 0%, #0D2E4A 45%, #071f33 80%, #031320 100%);
             box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.06),
-                0 2px 12px rgba(0, 229, 255, 0.18);
+                inset 0 1px 0 rgba(255, 255, 255, 0.20),
+                inset 0 -1px 0 rgba(0, 229, 255, 0.45),
+                0 3px 16px rgba(0, 0, 0, 0.5),
+                0 0 26px rgba(0, 229, 255, 0.22);
         }
         .subtitle-marquee-track {
             display: inline-flex; white-space: nowrap;
@@ -394,14 +458,11 @@
         .subtitle-marquee:hover .subtitle-marquee-track { animation-play-state: paused; }
         .subtitle-marquee-item {
             font-size: 15px; font-weight: 600;
-            color: var(--text-title);
+            color: #ffffff !important;
             letter-spacing: 0.3px;
             padding-right: 60px;
-            text-shadow: 0 0 10px rgba(0, 229, 255, 0.20);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 0 10px rgba(0, 229, 255, 0.28);
             transition: color 0.4s ease;
-        }
-        body.theme-dark .subtitle-marquee-item {
-            color: #ffffff;
         }
         .subtitle-marquee-item .nome-destaque {
             background: linear-gradient(180deg, #00e5ff 0%, #0077a8 100%);
@@ -413,38 +474,152 @@
         .subtitle-marquee-item .saudacao-destaque {
             color: var(--neon-azul);
             font-weight: 800;
-            text-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.7);
             padding: 0 2px;
         }
         @keyframes subtitle-marquee-scroll {
             from { transform: translateX(0); }
             to   { transform: translateX(-50%); }
         }
-        .panel-subtitle-bar {
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 18px; margin-bottom: 18px; flex-wrap: wrap;
-        }
-        .panel-subtitle-bar .panel-subtitle { margin-bottom: 0; }
 
-        .panel-subtitle-bar .panel-subtitle {
-            background: #ffffff;
-            color: var(--azul-petroleo);
-            padding: 10px 20px;
-            border-radius: 8px;
-            box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.9),
-                0 2px 10px rgba(13, 46, 74, 0.15);
-            border-left: 4px solid var(--neon-azul);
-            font-size: 12px;
-            letter-spacing: 1px;
-            white-space: nowrap;
+        /* ============================================================
+           DARK HEADER FORM-GROUPS
+           — todos os blocos de formulário/cabeçalho ficam escuros
+           ============================================================ */
+        .painel .form-group,
+        .periodo-filtro,
+        .dashboard-filters {
+            background: var(--header-bg);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 14px;
+            box-shadow: var(--header-shadow);
+            border: 1px solid rgba(0, 0, 0, 0.28);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
         }
-        body.theme-dark .panel-subtitle-bar .panel-subtitle {
-            background: #ffffff;
-            color: #0D2E4A;
+        .painel .form-group::after,
+        .periodo-filtro::after,
+        .dashboard-filters::after {
+            content: '';
+            position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.6), transparent);
+            pointer-events: none;
+        }
+
+        /* Labels brancas em todos os cabeçalhos escuros */
+        .painel .form-group .form-field label,
+        .periodo-filtro .form-field label,
+        .dashboard-filters .form-field label {
+            color: #ffffff !important;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+            letter-spacing: 1px;
+        }
+
+        /* Inputs: modo claro = branco com texto escuro */
+        .painel .form-group .form-field input,
+        .painel .form-group .form-field select,
+        .painel .form-group .form-field textarea,
+        .periodo-filtro .form-field input,
+        .dashboard-filters .form-field input,
+        .dashboard-filters .form-field select {
+            background: #ffffff !important;
+            color: #0D2E4A !important;
+            border: 1px solid rgba(0, 0, 0, 0.15) !important;
             box-shadow:
-                inset 0 1px 0 rgba(255,255,255,0.9),
-                0 2px 12px rgba(0, 229, 255, 0.25);
+                inset 0 1px 2px rgba(0, 0, 0, 0.06),
+                0 1px 0 rgba(255, 255, 255, 0.05) !important;
+            font-weight: 600;
+        }
+        .painel .form-group .form-field input:hover,
+        .painel .form-group .form-field select:hover,
+        .painel .form-group .form-field textarea:hover,
+        .periodo-filtro .form-field input:hover,
+        .dashboard-filters .form-field input:hover,
+        .dashboard-filters .form-field select:hover {
+            border-color: var(--neon-azul) !important;
+        }
+        .painel .form-group .form-field input:focus,
+        .painel .form-group .form-field select:focus,
+        .painel .form-group .form-field textarea:focus,
+        .periodo-filtro .form-field input:focus,
+        .dashboard-filters .form-field input:focus,
+        .dashboard-filters .form-field select:focus {
+            background: #ffffff !important;
+            color: #0D2E4A !important;
+            border-color: var(--neon-azul) !important;
+            box-shadow:
+                0 0 0 3px rgba(0, 229, 255, 0.25),
+                0 0 14px rgba(0, 229, 255, 0.55) !important;
+            outline: none;
+        }
+
+        /* Inputs no modo escuro: cinza-azulado metálico + fonte branca */
+        body.theme-dark .painel .form-group .form-field input,
+        body.theme-dark .painel .form-group .form-field select,
+        body.theme-dark .painel .form-group .form-field textarea,
+        body.theme-dark .periodo-filtro .form-field input,
+        body.theme-dark .dashboard-filters .form-field input,
+        body.theme-dark .dashboard-filters .form-field select {
+            background:
+                linear-gradient(180deg,
+                    rgba(255,255,255,0.14) 0%,
+                    rgba(255,255,255,0.04) 40%,
+                    rgba(0,0,0,0.40) 100%),
+                linear-gradient(135deg, #4a5a6a 0%, #2e3d4d 45%, #16202c 100%) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(140, 170, 200, 0.45) !important;
+            box-shadow:
+                inset 0 1px 0 rgba(180, 210, 240, 0.20),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+                0 2px 4px rgba(0, 0, 0, 0.35),
+                0 0 0 1px rgba(0, 0, 0, 0.30) !important;
+        }
+        body.theme-dark .painel .form-group .form-field input:hover,
+        body.theme-dark .painel .form-group .form-field select:hover,
+        body.theme-dark .painel .form-group .form-field textarea:hover,
+        body.theme-dark .periodo-filtro .form-field input:hover,
+        body.theme-dark .dashboard-filters .form-field input:hover,
+        body.theme-dark .dashboard-filters .form-field select:hover {
+            border-color: var(--neon-azul) !important;
+            box-shadow:
+                inset 0 1px 0 rgba(180, 210, 240, 0.24),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+                0 2px 6px rgba(0, 0, 0, 0.40),
+                0 0 0 1px rgba(0, 229, 255, 0.55),
+                0 0 14px rgba(0, 229, 255, 0.35) !important;
+        }
+        body.theme-dark .painel .form-group .form-field input:focus,
+        body.theme-dark .painel .form-group .form-field select:focus,
+        body.theme-dark .painel .form-group .form-field textarea:focus,
+        body.theme-dark .periodo-filtro .form-field input:focus,
+        body.theme-dark .dashboard-filters .form-field input:focus,
+        body.theme-dark .dashboard-filters .form-field select:focus {
+            background:
+                linear-gradient(180deg,
+                    rgba(255,255,255,0.16) 0%,
+                    rgba(255,255,255,0.04) 40%,
+                    rgba(0,0,0,0.45) 100%),
+                linear-gradient(135deg, #53667a 0%, #35475a 45%, #1a2632 100%) !important;
+            color: #ffffff !important;
+            border-color: var(--neon-azul) !important;
+            box-shadow:
+                inset 0 1px 0 rgba(180, 210, 240, 0.26),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.55),
+                0 0 0 3px rgba(0, 229, 255, 0.25),
+                0 0 14px rgba(0, 229, 255, 0.55) !important;
+        }
+        body.theme-dark .painel .form-group .form-field input::-webkit-calendar-picker-indicator,
+        body.theme-dark .periodo-filtro .form-field input::-webkit-calendar-picker-indicator,
+        body.theme-dark .dashboard-filters .form-field input::-webkit-calendar-picker-indicator {
+            filter: invert(0.9) hue-rotate(180deg);
+            cursor: pointer;
+        }
+        body.theme-dark .painel .form-group .form-field select option,
+        body.theme-dark .dashboard-filters .form-field select option {
+            background-color: #1a2632;
+            color: #ffffff;
         }
 
         /* ========== STAT CHIPS ========== */
@@ -556,187 +731,20 @@
         .stat-chip-value.saldo-positivo { color: var(--verde); }
         .stat-chip-value.saldo-negativo { color: var(--vermelho); }
 
-        /* ============================================================
-           FILTRO DE PERÍODO (PAINEL ALERTAS)
-           ============================================================ */
-        .periodo-filtro {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 15px; align-items: end;
-            background:
-                linear-gradient(180deg,
-                    rgba(255,255,255,0.14) 0%,
-                    rgba(255,255,255,0.02) 35%,
-                    rgba(0,0,0,0.15) 100%),
-                linear-gradient(135deg, #1c4767 0%, var(--azul-petroleo) 50%, #08243a 100%);
-            border-radius: 10px; padding: 14px 16px; margin-bottom: 18px;
-            box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.20),
-                inset 0 -1px 0 rgba(0, 229, 255, 0.28),
-                0 4px 14px rgba(13, 46, 74, 0.30),
-                0 0 0 1px rgba(0,0,0,0.2);
-            border: 1px solid rgba(0, 0, 0, 0.28);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-        .periodo-filtro::after {
-            content: '';
-            position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.6), transparent);
-            pointer-events: none;
-        }
-        .periodo-filtro .form-field label {
-            color: #ffffff !important;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
-            letter-spacing: 1px;
-        }
-        .periodo-filtro .form-field input {
-            background: #ffffff !important;
-            color: #0D2E4A !important;
-            border: 1px solid rgba(0, 0, 0, 0.15) !important;
-            box-shadow:
-                inset 0 1px 2px rgba(0, 0, 0, 0.06),
-                0 1px 0 rgba(255, 255, 255, 0.05) !important;
-            font-weight: 600;
-        }
-        .periodo-filtro .form-field input:hover {
-            border-color: var(--neon-azul) !important;
-        }
-        .periodo-filtro .form-field input:focus {
-            background: #ffffff !important;
-            color: #0D2E4A !important;
-            border-color: var(--neon-azul) !important;
-            box-shadow:
-                0 0 0 3px rgba(0, 229, 255, 0.25),
-                0 0 14px rgba(0, 229, 255, 0.55) !important;
-        }
-        body.theme-dark .periodo-filtro .form-field input {
-            background: linear-gradient(180deg, #4a5a6a 0%, #2e3d4d 45%, #1a2632 100%) !important;
-            color: #ffffff !important;
-            border: 1px solid rgba(140, 170, 200, 0.45) !important;
-        }
-        body.theme-dark .periodo-filtro .form-field input::-webkit-calendar-picker-indicator {
-            filter: invert(0.85) hue-rotate(180deg);
-            cursor: pointer;
-        }
-
-        /* ============================================================
-           DASHBOARD FILTERS — barra escura metálica
-           ============================================================ */
+        /* DASHBOARD FILTERS — grid específico (aplica sobre .dashboard-filters) */
         .dashboard-filters {
             display: grid;
             grid-template-columns: 1fr 1fr 2fr auto;
             gap: 12px; align-items: end;
-            background:
-                linear-gradient(180deg,
-                    rgba(255,255,255,0.14) 0%,
-                    rgba(255,255,255,0.02) 35%,
-                    rgba(0,0,0,0.15) 100%),
-                linear-gradient(135deg, #1c4767 0%, var(--azul-petroleo) 50%, #08243a 100%);
-            border-radius: 10px; padding: 14px 16px; margin-bottom: 14px;
-            box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.20),
-                inset 0 -1px 0 rgba(0, 229, 255, 0.28),
-                0 4px 14px rgba(13, 46, 74, 0.30),
-                0 0 0 1px rgba(0,0,0,0.2);
-            border: 1px solid rgba(0, 0, 0, 0.28);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-        .dashboard-filters::after {
-            content: '';
-            position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.6), transparent);
-            pointer-events: none;
-        }
-        .dashboard-filters .form-field label {
-            color: #ffffff !important;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
-            letter-spacing: 1px;
-        }
-        .dashboard-filters .form-field input,
-        .dashboard-filters .form-field select {
-            background: #ffffff !important;
-            color: #0D2E4A !important;
-            border: 1px solid rgba(0, 0, 0, 0.15) !important;
-            box-shadow:
-                inset 0 1px 2px rgba(0, 0, 0, 0.06),
-                0 1px 0 rgba(255, 255, 255, 0.05) !important;
-            font-weight: 600;
-        }
-        .dashboard-filters .form-field input:hover,
-        .dashboard-filters .form-field select:hover {
-            border-color: var(--neon-azul) !important;
-        }
-        .dashboard-filters .form-field input:focus,
-        .dashboard-filters .form-field select:focus {
-            background: #ffffff !important;
-            color: #0D2E4A !important;
-            border-color: var(--neon-azul) !important;
-            box-shadow:
-                0 0 0 3px rgba(0, 229, 255, 0.25),
-                0 0 14px rgba(0, 229, 255, 0.55) !important;
-            outline: none;
-        }
-        /* ============================================================
-           No modo escuro: campos de data e select em CINZA AZULADO
-           (blue-gray / slate) metálico
-           ============================================================ */
-        body.theme-dark .dashboard-filters .form-field input,
-        body.theme-dark .dashboard-filters .form-field select {
-            background:
-                linear-gradient(180deg,
-                    rgba(255,255,255,0.14) 0%,
-                    rgba(255,255,255,0.04) 40%,
-                    rgba(0,0,0,0.40) 100%),
-                linear-gradient(135deg, #4a5a6a 0%, #2e3d4d 45%, #16202c 100%) !important;
-            color: #ffffff !important;
-            border: 1px solid rgba(140, 170, 200, 0.45) !important;
-            box-shadow:
-                inset 0 1px 0 rgba(180, 210, 240, 0.20),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.55),
-                0 2px 4px rgba(0, 0, 0, 0.35),
-                0 0 0 1px rgba(0, 0, 0, 0.30) !important;
-        }
-        body.theme-dark .dashboard-filters .form-field input:hover,
-        body.theme-dark .dashboard-filters .form-field select:hover {
-            border-color: var(--neon-azul) !important;
-            box-shadow:
-                inset 0 1px 0 rgba(180, 210, 240, 0.24),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.55),
-                0 2px 6px rgba(0, 0, 0, 0.40),
-                0 0 0 1px rgba(0, 229, 255, 0.55),
-                0 0 14px rgba(0, 229, 255, 0.35) !important;
-        }
-        body.theme-dark .dashboard-filters .form-field input:focus,
-        body.theme-dark .dashboard-filters .form-field select:focus {
-            background:
-                linear-gradient(180deg,
-                    rgba(255,255,255,0.16) 0%,
-                    rgba(255,255,255,0.04) 40%,
-                    rgba(0,0,0,0.45) 100%),
-                linear-gradient(135deg, #53667a 0%, #35475a 45%, #1a2632 100%) !important;
-            color: #ffffff !important;
-            border-color: var(--neon-azul) !important;
-            box-shadow:
-                inset 0 1px 0 rgba(180, 210, 240, 0.26),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.55),
-                0 0 0 3px rgba(0, 229, 255, 0.25),
-                0 0 14px rgba(0, 229, 255, 0.55) !important;
-        }
-        body.theme-dark .dashboard-filters .form-field input::-webkit-calendar-picker-indicator {
-            filter: invert(0.9) hue-rotate(180deg);
-            cursor: pointer;
-        }
-        body.theme-dark .dashboard-filters .form-field select option {
-            background-color: #1a2632;
-            color: #ffffff;
         }
 
-        /* ============================================================
-           DASHBOARD — TOGGLE DADOS GERAIS / DADOS ESPECÍFICOS
-           ============================================================ */
+        /* FILTRO PERÍODO ALERTAS — grid específico */
+        .periodo-filtro {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 15px; align-items: end;
+        }
+
+        /* ========== DASHBOARD CARDS ========== */
         .dashboard-cards-row {
             display: flex;
             gap: 12px;
@@ -751,17 +759,8 @@
             gap: 8px;
             padding: 10px;
             border-radius: 12px;
-            background:
-                linear-gradient(180deg,
-                    rgba(255,255,255,0.14) 0%,
-                    rgba(255,255,255,0.02) 35%,
-                    rgba(0,0,0,0.15) 100%),
-                linear-gradient(135deg, #1c4767 0%, var(--azul-petroleo) 50%, #08243a 100%);
-            box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.20),
-                inset 0 -1px 0 rgba(0, 229, 255, 0.28),
-                0 4px 14px rgba(13, 46, 74, 0.30),
-                0 0 0 1px rgba(0,0,0,0.2);
+            background: var(--header-bg);
+            box-shadow: var(--header-shadow);
             border: 1px solid rgba(0, 0, 0, 0.28);
             position: relative;
             overflow: hidden;
@@ -883,8 +882,23 @@
             margin-bottom: 0;
             height: 102px;
             align-self: flex-start;
+            transition: opacity 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+                        transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+            will-change: opacity, transform;
         }
         .dashboard-cards.hidden { display: none !important; }
+        .dashboard-cards.fade-out {
+            opacity: 0;
+            transform: translateY(6px) scale(0.98);
+            pointer-events: none;
+        }
+        .dashboard-cards.fade-in {
+            animation: dashCardFadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+        }
+        @keyframes dashCardFadeIn {
+            from { opacity: 0; transform: translateY(6px) scale(0.98); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
 
         .dash-card {
             position: relative;
@@ -949,14 +963,8 @@
         }
         .dash-card:hover::before { transform: skewY(-3deg) translateX(6%); }
 
-        .dash-card-body {
-            position: relative;
-            z-index: 3;
-        }
-        .dash-card-text {
-            padding-right: 46px;
-            min-width: 0;
-        }
+        .dash-card-body { position: relative; z-index: 3; }
+        .dash-card-text { padding-right: 46px; min-width: 0; }
 
         .dash-card-label {
             font-size: 10px;
@@ -1008,14 +1016,8 @@
             transition: transform 0.35s ease, box-shadow 0.35s ease;
             z-index: 4;
         }
-        .dash-mini-icon-wrap svg {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-        .dash-card:hover .dash-mini-icon-wrap {
-            transform: scale(1.06);
-        }
+        .dash-mini-icon-wrap svg { width: 100%; height: 100%; display: block; }
+        .dash-card:hover .dash-mini-icon-wrap { transform: scale(1.06); }
 
         .dash-mini-icon-wrap.dash-mini-down {
             box-shadow:
@@ -1109,7 +1111,6 @@
                 0 0 30px rgba(0, 229, 255, 0.30),
                 0 0 0 1px rgba(0, 229, 255, 0.45);
         }
-
         .dash-card.accent-orange {
             background:
                 linear-gradient(180deg,
@@ -1143,7 +1144,6 @@
                 0 0 30px rgba(249, 115, 22, 0.40),
                 0 0 0 1px rgba(249, 115, 22, 0.55);
         }
-
         .dash-card.accent-amber {
             background:
                 linear-gradient(180deg,
@@ -1166,7 +1166,6 @@
         .dash-card.accent-amber::after {
             background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.95) 50%, transparent);
         }
-
         .dash-card.accent-teal {
             background:
                 linear-gradient(180deg,
@@ -1188,7 +1187,6 @@
         .dash-card.accent-teal::after {
             background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.9) 50%, transparent);
         }
-
         .dash-card.accent-blue {
             background:
                 linear-gradient(180deg,
@@ -1250,9 +1248,6 @@
             text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
         }
 
-        /* ============================================================
-           DASH-VIEW-AREA — Interior escuro metálico + efeito neon branco
-           ============================================================ */
         .dash-view-area {
             background:
                 linear-gradient(180deg,
@@ -1313,9 +1308,7 @@
             opacity: 0.85;
             transition: opacity 0.4s ease;
         }
-        .dash-view-area:hover::before {
-            opacity: 1;
-        }
+        .dash-view-area:hover::before { opacity: 1; }
         .dash-view { display: block; }
         .dash-view.hidden { display: none; }
 
@@ -1370,10 +1363,7 @@
                 transparent 100%);
             pointer-events: none;
         }
-        .chart-title > * {
-            position: relative;
-            z-index: 1;
-        }
+        .chart-title > * { position: relative; z-index: 1; }
 
         .chart-wrapper { position: relative; height: 240px; }
         .chart-wrapper.tall { height: 300px; }
@@ -1446,9 +1436,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* ============================================================
-           FORM FIELDS
-           ============================================================ */
+        /* ========== FORM FIELDS ========== */
         .form-group {
             display: grid; grid-template-columns: 1fr 1fr;
             gap: 18px; margin-bottom: 18px; align-items: flex-end;
@@ -1501,48 +1489,21 @@
         }
         .form-field textarea { resize: vertical; min-height: 90px; }
 
-        /* ============================================================
-           PAINEL CADASTRO — bordas externas dos campos em cor escura
-           ============================================================ */
-        #painelCadastro .form-field input,
-        #painelCadastro .form-field select,
-        #painelCadastro .form-field textarea {
-            border: 1.5px solid #0D2E4A !important;
-            box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.6),
-                0 1px 2px rgba(13, 46, 74, 0.10) !important;
+        /* PAINEL CADASTRO — campos específicos com borda escura */
+        #painelCadastro .form-group .form-field input,
+        #painelCadastro .form-group .form-field select,
+        #painelCadastro .form-group .form-field textarea {
             background: #ffffff;
             color: #1f2937;
         }
-        body.theme-dark #painelCadastro .form-field input,
-        body.theme-dark #painelCadastro .form-field select,
-        body.theme-dark #painelCadastro .form-field textarea {
-            border: 1.5px solid #0D2E4A !important;
+        body.theme-dark #painelCadastro .form-group .form-field input,
+        body.theme-dark #painelCadastro .form-group .form-field select,
+        body.theme-dark #painelCadastro .form-group .form-field textarea {
             background: #ffffff;
             color: #1f2937;
-        }
-        #painelCadastro .form-field input:hover,
-        #painelCadastro .form-field select:hover,
-        #painelCadastro .form-field textarea:hover {
-            border-color: #1c4767 !important;
-            box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.6),
-                0 0 0 3px rgba(13, 46, 74, 0.08),
-                0 0 12px rgba(0, 229, 255, 0.20) !important;
-        }
-        #painelCadastro .form-field input:focus,
-        #painelCadastro .form-field select:focus,
-        #painelCadastro .form-field textarea:focus {
-            border-color: var(--neon-azul) !important;
-            box-shadow:
-                0 0 0 3px rgba(0, 229, 255, 0.22),
-                0 0 14px rgba(0, 229, 255, 0.35) !important;
-            outline: none;
         }
 
-        /* ============================================================
-           CARD TITLE — Barra escura metálica
-           ============================================================ */
+        /* ========== CARD TITLE ========== */
         .card-title {
             font-size: 15px;
             font-weight: 700;
@@ -1593,9 +1554,7 @@
         }
         .card-title > * { position: relative; z-index: 1; }
 
-        /* ============================================================
-           TOGGLE STATUS
-           ============================================================ */
+        /* ========== TOGGLE STATUS ========== */
         .status-toggle-wrapper {
             margin-top: 8px;
             width: 60%;
@@ -1608,11 +1567,12 @@
         .status-toggle-label {
             font-size: 9px !important;
             font-weight: 700 !important;
-            color: var(--text-label) !important;
+            color: #ffffff !important;
             margin-bottom: 4px !important;
             text-transform: uppercase;
             letter-spacing: 0.7px;
             padding-left: 2px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
         }
         .status-toggle {
             display: flex;
@@ -1702,29 +1662,42 @@
             gap: 14px;
             margin-bottom: 14px;
             flex-wrap: wrap;
+            background: var(--header-bg);
+            border-radius: 10px;
+            padding: 12px 16px;
+            box-shadow: var(--header-shadow);
+            border: 1px solid rgba(0, 0, 0, 0.28);
+            position: relative;
+            overflow: hidden;
+        }
+        .registro-modo-bar::after {
+            content: '';
+            position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.6), transparent);
+            pointer-events: none;
         }
         .registro-modo-toggle {
             display: flex;
-            background: var(--bg-input);
-            border: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.30);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 9px;
             padding: 4px;
             gap: 4px;
             box-shadow:
-                inset 0 1px 3px rgba(0, 0, 0, 0.08),
-                inset 0 -1px 0 rgba(255, 255, 255, 0.3);
+                inset 0 1px 3px rgba(0, 0, 0, 0.5),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.05);
             transition: all 0.4s ease;
         }
         body.theme-dark .registro-modo-toggle {
             box-shadow:
-                inset 0 1px 3px rgba(0, 0, 0, 0.4),
+                inset 0 1px 3px rgba(0, 0, 0, 0.6),
                 inset 0 -1px 0 rgba(255, 255, 255, 0.03);
         }
         .registro-modo-btn {
             padding: 9px 18px;
             border: none;
             background: transparent;
-            color: var(--text-secondary);
+            color: rgba(255, 255, 255, 0.7);
             font-size: 12px;
             font-weight: 800;
             letter-spacing: 0.7px;
@@ -1778,13 +1751,8 @@
             transform: scale(1.08);
         }
 
-        .registro-modo-btn .registro-modo-icon {
-            font-size: 15px;
-        }
-
-        .registro-modo-btn:hover {
-            color: var(--text-primary);
-        }
+        .registro-modo-btn .registro-modo-icon { font-size: 15px; }
+        .registro-modo-btn:hover { color: #ffffff; }
         .registro-modo-btn.active[data-modo="visualizar"] {
             background:
                 linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(0,0,0,0.15) 100%),
@@ -1873,9 +1841,7 @@
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
             color: #ffffff;
         }
-        .registro-input:hover {
-            border-color: rgba(0, 229, 255, 0.45);
-        }
+        .registro-input:hover { border-color: rgba(0, 229, 255, 0.45); }
         .registro-input:focus {
             outline: none;
             border-color: var(--neon-azul);
@@ -1890,16 +1856,9 @@
             letter-spacing: 0.2px;
             font-variant-numeric: tabular-nums;
         }
-        body.theme-dark .registro-input.input-valor {
-            color: #ffffff;
-        }
-        .registro-input.input-descricao {
-            min-width: 130px;
-        }
-        .registro-input.input-data {
-            padding: 6px 6px;
-            font-size: 11px;
-        }
+        body.theme-dark .registro-input.input-valor { color: #ffffff; }
+        .registro-input.input-descricao { min-width: 130px; }
+        .registro-input.input-data { padding: 6px 6px; font-size: 11px; }
         .registro-input.input-select {
             padding-right: 22px;
             cursor: pointer;
@@ -1969,9 +1928,7 @@
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
             border: 1px solid var(--border-color);
         }
-        body.theme-dark .btn-secondary {
-            color: #ffffff;
-        }
+        body.theme-dark .btn-secondary { color: #ffffff; }
         .btn-secondary:hover {
             background: var(--bg-secondary-btn-hover);
             box-shadow:
@@ -2010,9 +1967,7 @@
             transition: border 0.4s ease;
             vertical-align: middle;
         }
-        body.theme-dark td {
-            color: #ffffff;
-        }
+        body.theme-dark td { color: #ffffff; }
         tbody tr:hover {
             background-color: var(--bg-table-hover);
             box-shadow: inset 3px 0 0 rgba(0, 229, 255, 0.55);
@@ -2129,7 +2084,6 @@
         .modal-buttons { display: flex; gap: 12px; justify-content: flex-end; }
         .modal-buttons .btn { padding: 10px 20px; font-size: 12px; }
 
-        /* ========== MODAL AVISO ========== */
         .modal-aviso { z-index: 2000; }
         .modal-aviso .modal-content {
             max-width: 420px;
@@ -2653,7 +2607,6 @@
 
                         <!-- MODO DADOS ESPECÍFICOS -->
                         <div class="dashboard-cards hidden" id="dashCardsEspecificos">
-                            <!-- 1. Total de Despesas A Pagar (RED) -->
                             <div class="dash-card accent-red">
                                 <div class="dash-card-body">
                                     <div class="dash-mini-icon-wrap dash-mini-pending" aria-hidden="true">
@@ -2673,7 +2626,6 @@
                                 </div>
                             </div>
 
-                            <!-- 2. Total de Despesas Pagas (ORANGE) -->
                             <div class="dash-card accent-orange">
                                 <div class="dash-card-body">
                                     <div class="dash-mini-icon-wrap dash-mini-paid" aria-hidden="true">
@@ -2692,7 +2644,6 @@
                                 </div>
                             </div>
 
-                            <!-- 3. Receitas A Receber (BLUE) -->
                             <div class="dash-card accent-blue">
                                 <div class="dash-card-body">
                                     <div class="dash-mini-icon-wrap dash-mini-receivable" aria-hidden="true">
@@ -2711,7 +2662,6 @@
                                 </div>
                             </div>
 
-                            <!-- 4. Saldo Final (TEAL) -->
                             <div class="dash-card accent-teal" id="dashCardSaldoFinal">
                                 <div class="dash-card-body">
                                     <div class="dash-mini-icon-wrap dash-mini-up" id="dashSaldoFinalIconWrap" aria-hidden="true"></div>
@@ -3240,6 +3190,7 @@
         let painelAtual = 'dashboard';
         let modoDashboardAtual = localStorage.getItem('cf_dash_mode') || 'tendencia';
         let modoDadosDashboard = localStorage.getItem('cf_dash_dados_mode') || 'gerais';
+        let transicaoDadosEmAndamento = false;
 
         let adminUnlocked = false;
         let adminPassCallback = null;
@@ -3677,11 +3628,14 @@
         }
 
         /* ============================================================
-           DASHBOARD — MODO DADOS GERAIS / ESPECÍFICOS
+           DASHBOARD — MUDANÇA DE MODO COM TRANSIÇÃO SUAVE
            ============================================================ */
         function mudarModoDadosDashboard(modo) {
             if (modo !== 'gerais' && modo !== 'especificos') return;
+            if (modo === modoDadosDashboard) return;
+            if (transicaoDadosEmAndamento) return;
 
+            transicaoDadosEmAndamento = true;
             modoDadosDashboard = modo;
             localStorage.setItem('cf_dash_dados_mode', modo);
 
@@ -3691,10 +3645,32 @@
 
             const elGerais = document.getElementById('dashCardsGerais');
             const elEspecificos = document.getElementById('dashCardsEspecificos');
-            if (elGerais) elGerais.classList.toggle('hidden', modo !== 'gerais');
-            if (elEspecificos) elEspecificos.classList.toggle('hidden', modo !== 'especificos');
 
-            if (dashboardIniciado) renderDashboard();
+            const mostrar = modo === 'gerais' ? elGerais : elEspecificos;
+            const esconder = modo === 'gerais' ? elEspecificos : elGerais;
+
+            if (esconder && !esconder.classList.contains('hidden')) {
+                esconder.classList.add('fade-out');
+            }
+
+            setTimeout(() => {
+                if (elGerais) elGerais.classList.toggle('hidden', modo !== 'gerais');
+                if (elEspecificos) elEspecificos.classList.toggle('hidden', modo !== 'especificos');
+
+                if (esconder) esconder.classList.remove('fade-out');
+
+                if (mostrar) {
+                    mostrar.classList.remove('fade-out');
+                    void mostrar.offsetWidth;
+                }
+
+                requestAnimationFrame(() => {
+                    if (dashboardIniciado) {
+                        renderDashboard();
+                    }
+                    transicaoDadosEmAndamento = false;
+                });
+            }, 180);
         }
 
         /* ============================================================
