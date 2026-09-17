@@ -45,7 +45,6 @@
             --grid-color: rgba(42, 79, 107, 0.08);
             --grid-light: rgba(42, 79, 107, 0.06);
 
-            /* Cabeçalhos escuros (mesmo em modo claro) */
             --header-bg:
                 linear-gradient(180deg,
                     rgba(255,255,255,0.14) 0%,
@@ -375,9 +374,6 @@
             transition: color 0.4s ease;
         }
 
-        /* ============================================================
-           CABEÇALHOS ESCUROS METÁLICOS — aplicados em todas as telas
-           ============================================================ */
         .panel-subtitle-row,
         .panel-subtitle-bar {
             display: flex; align-items: center; justify-content: space-between;
@@ -415,7 +411,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Subtitle marquee — mantido, já é escuro */
         .subtitle-marquee {
             flex: 1; min-width: 280px; max-width: 640px;
             overflow: hidden; position: relative;
@@ -482,10 +477,6 @@
             to   { transform: translateX(-50%); }
         }
 
-        /* ============================================================
-           DARK HEADER FORM-GROUPS
-           — todos os blocos de formulário/cabeçalho ficam escuros
-           ============================================================ */
         .painel .form-group,
         .periodo-filtro,
         .dashboard-filters {
@@ -508,7 +499,6 @@
             pointer-events: none;
         }
 
-        /* Labels brancas em todos os cabeçalhos escuros */
         .painel .form-group .form-field label,
         .periodo-filtro .form-field label,
         .dashboard-filters .form-field label {
@@ -517,7 +507,6 @@
             letter-spacing: 1px;
         }
 
-        /* Inputs: modo claro = branco com texto escuro */
         .painel .form-group .form-field input,
         .painel .form-group .form-field select,
         .painel .form-group .form-field textarea,
@@ -555,7 +544,6 @@
             outline: none;
         }
 
-        /* Inputs no modo escuro: cinza-azulado metálico + fonte branca */
         body.theme-dark .painel .form-group .form-field input,
         body.theme-dark .painel .form-group .form-field select,
         body.theme-dark .painel .form-group .form-field textarea,
@@ -731,14 +719,12 @@
         .stat-chip-value.saldo-positivo { color: var(--verde); }
         .stat-chip-value.saldo-negativo { color: var(--vermelho); }
 
-        /* DASHBOARD FILTERS — grid específico (aplica sobre .dashboard-filters) */
         .dashboard-filters {
             display: grid;
             grid-template-columns: 1fr 1fr 2fr auto;
             gap: 12px; align-items: end;
         }
 
-        /* FILTRO PERÍODO ALERTAS — grid específico */
         .periodo-filtro {
             display: grid; grid-template-columns: 1fr 1fr;
             gap: 15px; align-items: end;
@@ -1489,7 +1475,6 @@
         }
         .form-field textarea { resize: vertical; min-height: 90px; }
 
-        /* PAINEL CADASTRO — campos específicos com borda escura */
         #painelCadastro .form-group .form-field input,
         #painelCadastro .form-group .form-field select,
         #painelCadastro .form-group .form-field textarea {
@@ -2420,7 +2405,7 @@
 
             <div class="menu-section">
                 <div class="menu-section-title">Operacional</div>
-                <div class="menu-item" data-painel="cadastro" onclick="mostrarPainel('cadastro')">
+                <div class="menu-item active" data-painel="cadastro" onclick="mostrarPainel('cadastro')">
                     <span>⚙️ Cadastro Despesas/Receitas</span>
                 </div>
                 <div class="menu-item" data-painel="lancamento" onclick="mostrarPainel('lancamento')">
@@ -2443,7 +2428,7 @@
 
             <div class="menu-section">
                 <div class="menu-section-title">Análise</div>
-                <div class="menu-item active" data-painel="dashboard" onclick="mostrarPainel('dashboard')">
+                <div class="menu-item" data-painel="dashboard" onclick="mostrarPainel('dashboard')">
                     <span>📈 DashBoard</span>
                 </div>
             </div>
@@ -2473,7 +2458,7 @@
 
             <div class="content-area">
                 <!-- PAINEL DASHBOARD -->
-                <div id="painelDashboard" class="painel">
+                <div id="painelDashboard" class="painel hidden">
                     <div class="panel-title">Painel - DashBoard Financeiro</div>
                     <div class="panel-subtitle-row">
                         <div class="panel-subtitle">Análise visual inteligente das suas finanças</div>
@@ -2979,7 +2964,7 @@
                 </div>
 
                 <!-- PAINEL CADASTRO -->
-                <div id="painelCadastro" class="painel hidden">
+                <div id="painelCadastro" class="painel">
                     <div class="panel-title">Cadastro de Despesas e Receitas</div>
                     <div class="panel-subtitle-row">
                         <div class="panel-subtitle">Gerencie seus tipos personalizados</div>
@@ -3011,13 +2996,14 @@
                     </div>
 
                     <div class="button-group">
+                        <button class="btn btn-secondary hidden" id="btnCancelarEdicaoTipo" onclick="cancelarEdicaoTipo()">Cancelar Edição</button>
                         <button class="btn btn-secondary" onclick="limparCadastro()">Limpar</button>
-                        <button class="btn btn-primary" onclick="salvarCadastro()">Salvar Tipo</button>
+                        <button class="btn btn-primary" id="btnSalvarTipo" onclick="salvarCadastro()">Salvar Tipo</button>
                     </div>
 
                     <div class="card" style="margin-top: 30px;">
                         <div class="card-title">📋 Tipos Cadastrados</div>
-                        <div id="listaEventos" style="max-height: 400px; overflow-y: auto;"></div>
+                        <div id="listaEventos" style="max-height: 500px; overflow-y: auto;"></div>
                     </div>
                 </div>
 
@@ -3172,22 +3158,51 @@
            ESTADO GLOBAL
            ============================================================ */
         let movimentacoes = JSON.parse(localStorage.getItem('movimentacoes')) || [];
-        let tipos = JSON.parse(localStorage.getItem('tipos')) || [
-            { id: 1, nome: 'Energia', categoria: 'despesa', descricao: 'Conta de energia elétrica mensal' },
-            { id: 2, nome: 'Água', categoria: 'despesa', descricao: 'Conta de água e esgoto mensal' },
-            { id: 3, nome: 'Aluguel', categoria: 'despesa', descricao: 'Aluguel do imóvel residencial' },
-            { id: 4, nome: 'Salário', categoria: 'despesa', descricao: 'Pagamento de salário de funcionários' },
-            { id: 5, nome: 'Venda', categoria: 'receita', descricao: 'Receita proveniente de vendas' },
-            { id: 6, nome: 'Serviço', categoria: 'receita', descricao: 'Receita proveniente de prestação de serviços' }
+
+        // ============================================================
+        // TIPOS PADRÃO — Receitas e Despesas pré-cadastradas
+        // ============================================================
+        const TIPOS_PADRAO = [
+            // RECEITAS
+            { id: 1,  nome: 'Salário',          categoria: 'receita', descricao: '' },
+            { id: 2,  nome: 'Venda',            categoria: 'receita', descricao: '' },
+            { id: 3,  nome: 'Empréstimo',       categoria: 'receita', descricao: '' },
+            { id: 4,  nome: 'Férias',           categoria: 'receita', descricao: '' },
+            { id: 5,  nome: 'Décimo',           categoria: 'receita', descricao: '' },
+            { id: 6,  nome: 'Premiação',        categoria: 'receita', descricao: '' },
+            { id: 7,  nome: 'Serviço',          categoria: 'receita', descricao: '' },
+            { id: 8,  nome: 'Aluguel',          categoria: 'receita', descricao: '' },
+            // DESPESAS
+            { id: 9,  nome: 'Salário',          categoria: 'despesa', descricao: '' },
+            { id: 10, nome: 'Compra',           categoria: 'despesa', descricao: '' },
+            { id: 11, nome: 'Empréstimo',       categoria: 'despesa', descricao: '' },
+            { id: 12, nome: 'Férias',           categoria: 'despesa', descricao: '' },
+            { id: 13, nome: 'Décimo',           categoria: 'despesa', descricao: '' },
+            { id: 14, nome: 'Premiação',        categoria: 'despesa', descricao: '' },
+            { id: 15, nome: 'Serviço',          categoria: 'despesa', descricao: '' },
+            { id: 16, nome: 'Aluguel',          categoria: 'despesa', descricao: '' },
+            { id: 17, nome: 'Parcela da casa',  categoria: 'despesa', descricao: '' },
+            { id: 18, nome: 'Conta de luz',     categoria: 'despesa', descricao: '' },
+            { id: 19, nome: 'Conta de água',    categoria: 'despesa', descricao: '' },
+            { id: 20, nome: 'Internet',         categoria: 'despesa', descricao: '' },
+            { id: 21, nome: 'Gás',              categoria: 'despesa', descricao: '' },
+            { id: 22, nome: 'Gasolina',         categoria: 'despesa', descricao: '' },
+            { id: 23, nome: 'Emplacamento',     categoria: 'despesa', descricao: '' },
+            { id: 24, nome: 'IPVA',             categoria: 'despesa', descricao: '' },
+            { id: 25, nome: 'IPTU',             categoria: 'despesa', descricao: '' }
         ];
-        let sessao = JSON.parse(localStorage.getItem('cf_sessao')) || null;
+
+        let tipos = JSON.parse(localStorage.getItem('tipos')) || TIPOS_PADRAO;
+
+        // Sessão em sessionStorage (não persiste ao fechar o navegador)
+        let sessao = JSON.parse(sessionStorage.getItem('cf_sessao')) || null;
 
         let acaoConfirmada = null;
         let dashboardIniciado = false;
         let dashChartBar = null;
         let dashChartPie = null;
         let dashChartLine = null;
-        let painelAtual = 'dashboard';
+        let painelAtual = 'cadastro';
         let modoDashboardAtual = localStorage.getItem('cf_dash_mode') || 'tendencia';
         let modoDadosDashboard = localStorage.getItem('cf_dash_dados_mode') || 'gerais';
         let transicaoDadosEmAndamento = false;
@@ -3201,6 +3216,8 @@
 
         let modoRegistroEdicao = false;
         let edicoesPendentes = {};
+
+        let tipoEditandoId = null;
 
         const SVG_MINI_DOWN = `
             <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
@@ -3442,9 +3459,11 @@
         /* ============================================================
            AUTENTICAÇÃO
            ============================================================ */
+        // Sessão em sessionStorage: sobrevive a refresh do F5,
+        // mas é descartada quando a aba/navegador é fechado.
         function salvarSessao() {
-            if (sessao) localStorage.setItem('cf_sessao', JSON.stringify(sessao));
-            else localStorage.removeItem('cf_sessao');
+            if (sessao) sessionStorage.setItem('cf_sessao', JSON.stringify(sessao));
+            else sessionStorage.removeItem('cf_sessao');
         }
 
         function mostrarMensagemLogin(texto, tipo) {
@@ -3533,7 +3552,8 @@
                 especificos.classList.toggle('hidden', modoDadosDashboard !== 'especificos');
             }
 
-            mostrarPainelInterno('dashboard');
+            // Sempre abre na tela de Cadastro de Despesas/Receitas
+            mostrarPainelInterno('cadastro');
             atualizarTodosPaineis();
         }
 
@@ -4579,24 +4599,83 @@
         function atualizarListaCadastros() {
             const lista = document.getElementById('listaEventos');
             lista.innerHTML = '';
-            tipos.forEach(tipo => {
+
+            if (!tipos || tipos.length === 0) {
+                lista.innerHTML = `
+                    <div class="empty-state" style="padding: 24px;">
+                        <div class="empty-state-icon">📋</div>
+                        <div class="empty-state-title">Nenhum tipo cadastrado</div>
+                        <div class="empty-state-text">Cadastre o primeiro tipo acima.</div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Ordena: receitas primeiro, depois despesas (alfabético dentro de cada)
+            const tiposOrdenados = [...tipos].sort((a, b) => {
+                if (a.categoria !== b.categoria) {
+                    return a.categoria === 'receita' ? -1 : 1;
+                }
+                return a.nome.localeCompare(b.nome, 'pt-BR');
+            });
+
+            tiposOrdenados.forEach(tipo => {
                 const card = document.createElement('div');
                 card.style.cssText = 'background: var(--bg-elevated); padding: 12px; border-radius: 6px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-subtle); gap: 12px;';
                 const descHtml = tipo.descricao && tipo.descricao.trim() !== ''
                     ? `<div class="tipo-card-descricao" title="${tipo.descricao.replace(/"/g, '&quot;')}">📝 ${tipo.descricao}</div>`
                     : '';
+                const categoriaLabel = tipo.categoria === 'receita' ? '💰 Receita' : '📊 Despesa';
                 card.innerHTML = `
                     <div style="flex: 1; min-width: 0;">
                         <div style="font-weight: 600; color: var(--text-title);">${tipo.nome}</div>
                         <div style="font-size: 12px; color: var(--text-label);">
-                            ${tipo.categoria === 'despesa' ? '📊 Despesa' : '💰 Receita'}
+                            ${categoriaLabel}
                         </div>
                         ${descHtml}
                     </div>
-                    <button class="btn-small" style="background: linear-gradient(180deg, #ef4444 0%, #991b1b 100%); flex-shrink: 0;" onclick="deletarTipo(${tipo.id})">Remover</button>
+                    <div style="display: flex; gap: 6px; flex-shrink: 0;">
+                        <button class="btn-small" style="background: linear-gradient(180deg, #3b82f6 0%, #1e40af 100%);" onclick="editarTipo(${tipo.id})">Editar</button>
+                        <button class="btn-small" style="background: linear-gradient(180deg, #ef4444 0%, #991b1b 100%);" onclick="deletarTipo(${tipo.id})">Remover</button>
+                    </div>
                 `;
                 lista.appendChild(card);
             });
+        }
+
+        function editarTipo(id) {
+            const tipo = tipos.find(t => t.id === id);
+            if (!tipo) return;
+
+            tipoEditandoId = id;
+            document.getElementById('tipoCadastro').value = tipo.nome;
+            document.getElementById('categoriaCadastro').value = tipo.categoria;
+            document.getElementById('descricaoCadastro').value = tipo.descricao || '';
+
+            const btnSalvar = document.getElementById('btnSalvarTipo');
+            if (btnSalvar) btnSalvar.textContent = 'Salvar Alterações';
+
+            const btnCancelar = document.getElementById('btnCancelarEdicaoTipo');
+            if (btnCancelar) btnCancelar.classList.remove('hidden');
+
+            const campo = document.getElementById('tipoCadastro');
+            if (campo) {
+                campo.focus();
+                campo.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function cancelarEdicaoTipo() {
+            tipoEditandoId = null;
+            document.getElementById('tipoCadastro').value = '';
+            document.getElementById('categoriaCadastro').value = '';
+            document.getElementById('descricaoCadastro').value = '';
+
+            const btnSalvar = document.getElementById('btnSalvarTipo');
+            if (btnSalvar) btnSalvar.textContent = 'Salvar Tipo';
+
+            const btnCancelar = document.getElementById('btnCancelarEdicaoTipo');
+            if (btnCancelar) btnCancelar.classList.add('hidden');
         }
 
         function salvarCadastro() {
@@ -4622,7 +4701,8 @@
             const nomeNormalizado = nome.toLowerCase();
             const duplicadoNaCategoria = tipos.some(t =>
                 t.categoria === categoria &&
-                t.nome.toLowerCase() === nomeNormalizado
+                t.nome.toLowerCase() === nomeNormalizado &&
+                (tipoEditandoId === null || String(t.id) !== String(tipoEditandoId))
             );
 
             if (duplicadoNaCategoria) {
@@ -4631,26 +4711,62 @@
                 return;
             }
 
-            tipos.push({ id: Date.now(), nome, categoria, descricao });
-            salvarTipos();
-            limparCadastro();
-            atualizarListaCadastros();
-            atualizarCamposTipo();
-            atualizarFiltroTiposDashboard();
-            mostrarAviso('✅ Tipo cadastrado com sucesso!');
-        }
-
-        function deletarTipo(id) {
-            if (confirm('Tem certeza que deseja remover este tipo?')) {
-                tipos = tipos.filter(t => t.id !== id);
+            if (tipoEditandoId !== null) {
+                // Edição
+                const tipo = tipos.find(t => String(t.id) === String(tipoEditandoId));
+                if (!tipo) {
+                    tipoEditandoId = null;
+                    mostrarAviso('❌ Tipo não encontrado para edição.');
+                    return;
+                }
+                tipo.nome = nome;
+                tipo.categoria = categoria;
+                tipo.descricao = descricao;
                 salvarTipos();
+                cancelarEdicaoTipo();
                 atualizarListaCadastros();
                 atualizarCamposTipo();
                 atualizarFiltroTiposDashboard();
+                mostrarAviso('✅ Tipo atualizado com sucesso!');
+            } else {
+                // Novo cadastro
+                tipos.push({ id: Date.now(), nome, categoria, descricao });
+                salvarTipos();
+                document.getElementById('tipoCadastro').value = '';
+                document.getElementById('categoriaCadastro').value = '';
+                document.getElementById('descricaoCadastro').value = '';
+                atualizarListaCadastros();
+                atualizarCamposTipo();
+                atualizarFiltroTiposDashboard();
+                mostrarAviso('✅ Tipo cadastrado com sucesso!');
+            }
+        }
+
+        function deletarTipo(id) {
+            const tipo = tipos.find(t => t.id === id);
+            if (!tipo) return;
+            if (confirm(`Tem certeza que deseja remover o tipo "${tipo.nome}"?`)) {
+                tipos = tipos.filter(t => t.id !== id);
+                salvarTipos();
+
+                // Se estava editando este tipo, cancela a edição
+                if (String(tipoEditandoId) === String(id)) {
+                    cancelarEdicaoTipo();
+                }
+
+                atualizarListaCadastros();
+                atualizarCamposTipo();
+                atualizarFiltroTiposDashboard();
+                mostrarAviso('✅ Tipo removido com sucesso!');
             }
         }
 
         function limparCadastro() {
+            // Se estava editando, cancela a edição primeiro
+            if (tipoEditandoId !== null) {
+                cancelarEdicaoTipo();
+                return;
+            }
             document.getElementById('tipoCadastro').value = '';
             document.getElementById('categoriaCadastro').value = '';
             document.getElementById('descricaoCadastro').value = '';
@@ -5628,6 +5744,9 @@
             inicializarPeriodoAlertas();
             atualizarBarraModoRegistro();
 
+            // Sessão NÃO persiste ao fechar o navegador (usa sessionStorage).
+            // Ao abrir, se houver sessão válida na ABA atual, entra direto;
+            // caso contrário, exige login.
             let sessaoValida = false;
             if (sessao && sessao.usuario) {
                 const u = USUARIOS_PREDEFINIDOS.find(x => x.usuario === sessao.usuario);
@@ -5644,6 +5763,7 @@
 
             console.log('✅ Sistema inicializado!');
             console.log('Usuários ativos:', obterUsuariosAtivos().length, 'de 50 slots');
+            console.log('Tipos cadastrados:', tipos.length);
             console.log('Movimentações:', movimentacoes.length);
         });
     </script>
