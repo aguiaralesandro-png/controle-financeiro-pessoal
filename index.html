@@ -3115,7 +3115,7 @@
            ============================================================ */
         const USUARIOS_PREDEFINIDOS = [
             { usuario: 'admin', senha: '@Aa147852;', admin: true },
-            { usuario: 'Dauenne', senha: 'adm0196' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
+            { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
             { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
             { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
             { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
@@ -3405,13 +3405,26 @@
         function isNomeFeminino(nome) {
             if (!nome) return false;
             const n = nome.trim().toLowerCase();
+
+            // Exceções femininas: nomes que NÃO terminam em "a", mas são femininos.
+            // Dauenne é sempre tratado como nome de mulher.
+            const excecoesFemininas = [
+                'dauenne'
+            ];
+            if (excecoesFemininas.includes(n)) return true;
+
+            // Exceções masculinas: nomes que terminam em "a" (ou não),
+            // mas são masculinos.
             const excecoesMasculinas = [
                 'luca', 'joshua', 'nikita', 'sasha', 'elias', 'isaías', 'isaias',
                 'tomás', 'tomas', 'nicolas', 'matias', 'jeremias', 'zacarias',
                 'admin', 'administrador', 'adm', 'gestor', 'gerente', 'root'
             ];
             if (excecoesMasculinas.includes(n)) return false;
+
+            // Regra geral: termina em "a" (mas não em "ão") → feminino.
             if (/a$/.test(n) && !/ão$/.test(n)) return true;
+
             return false;
         }
 
