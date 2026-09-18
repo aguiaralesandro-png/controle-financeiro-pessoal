@@ -2,10 +2,10 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Controle Financeiro Pessoal</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         :root {
             --azul-petroleo: #0D2E4A;
@@ -87,14 +87,19 @@
             --grid-light: rgba(224, 232, 240, 0.05);
         }
 
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background-color: var(--bg-app);
             color: var(--text-primary);
             transition: background-color 0.4s ease, color 0.4s ease;
+            -webkit-text-size-adjust: 100%;
         }
 
-        .container { display: flex; height: 100vh; }
+        .container { display: flex; height: 100vh; height: 100dvh; }
 
         select option, select optgroup, datalist option {
             background-color: var(--bg-option);
@@ -114,6 +119,55 @@
         }
         body.theme-dark input[type="date"] { color-scheme: dark; }
 
+        /* ========== BOTÃO HAMBURGER (só mobile) ========== */
+        .mobile-menu-btn {
+            display: none;
+            width: 42px;
+            height: 42px;
+            padding: 0;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 229, 255, 0.35);
+            background:
+                linear-gradient(180deg, #1f4563 0%, #0a2842 55%, #05192b 100%);
+            color: #ffffff;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.14),
+                0 2px 8px rgba(0,0,0,0.3);
+        }
+        .mobile-menu-btn svg {
+            width: 22px; height: 22px;
+            stroke: #ffffff; fill: none; stroke-width: 2.5;
+            stroke-linecap: round; stroke-linejoin: round;
+            filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.6));
+        }
+        .mobile-menu-btn:hover, .mobile-menu-btn:active {
+            border-color: rgba(0, 229, 255, 0.8);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.2),
+                0 0 0 1px rgba(0, 229, 255, 0.5),
+                0 0 14px rgba(0, 229, 255, 0.4);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+            z-index: 98;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .sidebar-overlay.show {
+            display: block;
+            opacity: 1;
+        }
+
         /* ========== SIDEBAR ========== */
         .sidebar {
             width: 260px;
@@ -126,6 +180,8 @@
             overflow-y: auto;
             position: relative;
             z-index: 10;
+            flex-shrink: 0;
+            transition: transform 0.3s ease, left 0.3s ease;
         }
         .sidebar-header {
             padding: 0 22px 22px;
@@ -210,6 +266,7 @@
         .main-content {
             flex: 1; display: flex; flex-direction: column;
             background-color: var(--bg-app); overflow: hidden;
+            min-width: 0;
         }
         .header {
             background:
@@ -219,7 +276,7 @@
                     rgba(0, 0, 0, 0.28) 100%),
                 linear-gradient(135deg, #123a5a 0%, #0a2842 45%, #05192b 100%);
             padding: 14px 32px;
-            display: flex; align-items: center; gap: 20px;
+            display: flex; align-items: center; gap: 16px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.4);
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.12),
@@ -236,6 +293,7 @@
             flex: 1; overflow: hidden; position: relative;
             -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 4%, #000 96%, transparent 100%);
             mask-image: linear-gradient(90deg, transparent 0%, #000 4%, #000 96%, transparent 100%);
+            min-width: 0;
         }
         .marquee-track {
             display: inline-flex; white-space: nowrap;
@@ -331,6 +389,7 @@
             flex: 1; overflow-y: auto; padding: 28px 32px;
             background: var(--bg-content);
             transition: background 0.4s ease;
+            -webkit-overflow-scrolling: touch;
         }
 
         .alert-box {
@@ -1429,7 +1488,7 @@
         }
         .form-group.align-top { align-items: flex-start; }
         .form-group.full { grid-template-columns: 1fr; }
-        .form-field { display: flex; flex-direction: column; }
+        .form-field { display: flex; flex-direction: column; min-width: 0; }
         .form-field label {
             font-size: 11px; font-weight: 700; color: var(--text-label);
             margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px;
@@ -1445,6 +1504,19 @@
             background: var(--bg-input);
             color: var(--text-primary);
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .form-field select {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230D2E4A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 14px;
+            padding-right: 30px;
+        }
+        body.theme-dark .form-field select {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
         }
         body.theme-dark .form-field input,
         body.theme-dark .form-field select,
@@ -1880,6 +1952,7 @@
 
         .button-group {
             display: flex; gap: 12px; margin-top: 22px; justify-content: flex-end;
+            flex-wrap: wrap;
         }
 
         /* ========== BUTTONS ========== */
@@ -1888,6 +1961,7 @@
             font-size: 13px; font-weight: 600; cursor: pointer;
             transition: all 0.3s ease; text-transform: uppercase;
             letter-spacing: 0.5px; position: relative;
+            touch-action: manipulation;
         }
         .btn-primary {
             background:
@@ -1928,6 +2002,7 @@
             box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,0.9);
             overflow: hidden; transition: all 0.4s ease;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         body.theme-dark .table-container {
             box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,0.04);
@@ -2011,6 +2086,9 @@
         .status-admin { background: linear-gradient(135deg, #00e5ff 0%, #0077a8 100%); color: #ffffff; }
         .status-redirecionada { background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%); color: #ffffff; }
         .status-padrao { background: linear-gradient(135deg, #6b7280 0%, #374151 100%); color: #ffffff; }
+        .status-sexo-f { background: linear-gradient(135deg, #ec4899 0%, #9d174d 100%); color: #ffffff; }
+        .status-sexo-m { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); color: #ffffff; }
+        .status-sexo-vazio { background: linear-gradient(135deg, #6b7280 0%, #374151 100%); color: #ffffff; }
 
         .hidden { display: none !important; }
 
@@ -2028,10 +2106,12 @@
 
         .action-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
         .btn-small {
-            padding: 5px 10px; font-size: 11px; border: none;
+            padding: 6px 11px; font-size: 11px; border: none;
             border-radius: 4px; cursor: pointer;
             background: linear-gradient(180deg, #345a78 0%, var(--azul-medio) 100%);
             color: #ffffff; transition: all 0.2s ease; font-weight: 600;
+            touch-action: manipulation;
+            min-height: 32px;
         }
         .btn-small:hover {
             background: linear-gradient(180deg, #1c4767 0%, var(--azul-petroleo) 100%);
@@ -2050,15 +2130,19 @@
             background-color: rgba(0, 0, 0, 0.55);
             z-index: 1000; align-items: center; justify-content: center;
             backdrop-filter: blur(4px);
+            padding: 16px;
+            overflow-y: auto;
         }
         .modal.show { display: flex; }
         .modal-content {
             background: var(--bg-elevated);
             border-radius: 12px; padding: 28px;
-            max-width: 500px; width: 90%;
+            max-width: 500px; width: 100%;
             box-shadow: var(--shadow-lg);
             border: 1px solid var(--border-subtle);
             transition: all 0.4s ease;
+            max-height: calc(100vh - 32px);
+            overflow-y: auto;
         }
         .modal-header {
             font-size: 19px; font-weight: 700; color: var(--text-title);
@@ -2066,7 +2150,7 @@
             border-bottom: 2px solid var(--border-color);
         }
         .modal-body { margin-bottom: 18px; line-height: 1.6; color: var(--text-primary); font-size: 14px; }
-        .modal-buttons { display: flex; gap: 12px; justify-content: flex-end; }
+        .modal-buttons { display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap; }
         .modal-buttons .btn { padding: 10px 20px; font-size: 12px; }
 
         .modal-aviso { z-index: 2000; }
@@ -2291,7 +2375,9 @@
             text-overflow: ellipsis;
         }
 
-        /* ========== RESPONSIVO ========== */
+        /* ============================================================
+           RESPONSIVO — TABLETS
+           ============================================================ */
         @media (max-width: 1200px) {
             .dashboard-filters { grid-template-columns: 1fr 1fr; }
             .dashboard-filters .btn { grid-column: auto; }
@@ -2310,6 +2396,7 @@
             .dash-dados-btn { flex: 1; min-width: 140px; }
             .dashboard-cards { height: auto; }
         }
+
         @media (max-width: 1024px) {
             .sidebar { width: 220px; }
             .content-area { padding: 20px 22px; }
@@ -2328,8 +2415,262 @@
             .registro-modo-bar { flex-direction: column; align-items: stretch; }
             .dashboard-cards { grid-template-columns: repeat(2, 1fr); }
         }
-        @media (max-width: 640px) {
-            .dashboard-cards { grid-template-columns: 1fr; }
+
+        /* ============================================================
+           RESPONSIVO — SMARTPHONE
+           ============================================================ */
+        @media (max-width: 768px) {
+            /* Sidebar como gaveta lateral */
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                height: 100dvh;
+                width: 82vw;
+                max-width: 320px;
+                z-index: 99;
+                transform: translateX(-100%);
+                box-shadow: 4px 0 30px rgba(0, 0, 0, 0.55);
+                padding-top: 16px;
+                padding-bottom: calc(16px + env(safe-area-inset-bottom, 0));
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .mobile-menu-btn { display: inline-flex; }
+
+            .container { flex-direction: column; }
+
+            /* Header compacto */
+            .header {
+                padding: 10px 14px;
+                gap: 10px;
+            }
+            .marquee-item { font-size: 14px; padding-right: 60px; }
+            .btn-theme-global {
+                width: 40px;
+                height: 40px;
+                border-radius: 10px;
+            }
+            .btn-theme-global svg { width: 20px; height: 20px; }
+
+            /* Conteúdo */
+            .content-area {
+                padding: 14px 12px calc(14px + env(safe-area-inset-bottom, 0));
+            }
+            .panel-title {
+                margin: -14px -12px 12px -12px;
+                padding: 12px 16px;
+                font-size: 15px;
+                letter-spacing: 0.2px;
+            }
+
+            /* Subtítulos / marquee de saudação */
+            .panel-subtitle-row,
+            .panel-subtitle-bar {
+                padding: 10px 12px;
+                gap: 10px;
+                margin-bottom: 12px;
+            }
+            .panel-subtitle-row .panel-subtitle,
+            .panel-subtitle-bar .panel-subtitle {
+                font-size: 10px;
+                padding: 5px 10px;
+                letter-spacing: 0.8px;
+                white-space: normal;
+            }
+            .subtitle-marquee {
+                min-width: 0;
+                width: 100%;
+                max-width: 100%;
+                padding: 8px 10px;
+            }
+            .subtitle-marquee-item { font-size: 12.5px; padding-right: 40px; }
+
+            /* Form groups: sempre 1 coluna */
+            .form-group,
+            .form-group.align-top { grid-template-columns: 1fr; gap: 12px; }
+            .form-group { margin-bottom: 12px; }
+            .painel .form-group,
+            .periodo-filtro,
+            .dashboard-filters {
+                padding: 12px;
+                margin-bottom: 12px;
+            }
+            .form-field label {
+                font-size: 10px;
+                letter-spacing: 0.6px;
+            }
+            .form-field input,
+            .form-field select,
+            .form-field textarea {
+                padding: 11px 12px;
+                font-size: 14px;
+                min-height: 42px;
+            }
+
+            /* Filtros do dashboard */
+            .dashboard-filters { grid-template-columns: 1fr; }
+            .dashboard-filters .btn {
+                width: 100%;
+                grid-column: auto;
+            }
+
+            /* Período alertas */
+            .periodo-filtro { grid-template-columns: 1fr; }
+
+            /* Stat chips em largura cheia */
+            .periodo-stats { width: 100%; flex-direction: column; }
+            .stat-chip { min-width: 0; width: 100%; }
+
+            /* Toggle de dados do dashboard */
+            .dash-dados-toggle {
+                flex-direction: column;
+                padding: 8px;
+                width: 100%;
+            }
+            .dash-dados-toggle-label { width: 100%; }
+            .dash-dados-btn {
+                width: 100%;
+                flex: none;
+                padding: 10px 12px;
+                font-size: 11px;
+            }
+
+            /* Cards do dashboard */
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            .dash-card {
+                padding: 10px 14px;
+                min-height: 78px;
+            }
+            .dash-card-value { font-size: 18px; }
+            .dash-card-label { font-size: 9.5px; letter-spacing: 0.8px; }
+
+            /* Toggle modo gráfico */
+            .dash-mode-toggle { flex-direction: column; }
+            .dash-mode-btn {
+                width: 100%;
+                text-align: center;
+                padding: 11px 16px;
+                font-size: 11px;
+            }
+
+            /* Área de gráficos */
+            .dash-view-area { padding: 10px; }
+            .chart-title {
+                margin: -10px -10px 10px -10px;
+                padding: 10px 12px;
+                font-size: 10.5px;
+                letter-spacing: 0.6px;
+                white-space: normal;
+                line-height: 1.35;
+            }
+            .chart-wrapper { height: 220px; }
+            .chart-wrapper.tall { height: 260px; }
+            .dash-comparison-grid { grid-template-columns: 1fr; }
+
+            /* Barra de modos do registro */
+            .registro-modo-bar {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 10px 12px;
+                gap: 10px;
+            }
+            .registro-modo-toggle {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .registro-modo-btn {
+                flex: 1;
+                padding: 10px 12px;
+                font-size: 11px;
+                justify-content: center;
+            }
+            .btn-salvar-edicao { width: 100%; justify-content: center; }
+
+            /* Tabelas: scroll horizontal confortável */
+            .table-container {
+                border-radius: 6px;
+                -webkit-overflow-scrolling: touch;
+            }
+            table { font-size: 12px; min-width: 640px; }
+            th {
+                padding: 10px 8px;
+                font-size: 10px;
+                letter-spacing: 0.3px;
+            }
+            td {
+                padding: 10px 8px;
+                font-size: 12px;
+            }
+            .status-badge {
+                min-width: 84px;
+                padding: 5px 9px;
+                font-size: 10px;
+            }
+
+            /* Botões */
+            .btn {
+                padding: 12px 20px;
+                font-size: 12.5px;
+                min-height: 44px;
+            }
+            .button-group {
+                flex-direction: column-reverse;
+                gap: 10px;
+                margin-top: 16px;
+            }
+            .button-group .btn { width: 100%; }
+
+            /* Toggle status */
+            .status-toggle-wrapper {
+                width: 100%;
+                max-width: 100%;
+            }
+            .status-toggle-btn { padding: 8px 4px; font-size: 10px; }
+
+            /* Modais */
+            .modal { padding: 12px; }
+            .modal-content { padding: 20px; border-radius: 10px; }
+            .modal-header { font-size: 16px; }
+            .modal-buttons { flex-direction: column-reverse; }
+            .modal-buttons .btn { width: 100%; }
+
+            /* Card de cadastro */
+            .card { padding: 14px; }
+            .card-title {
+                margin: -14px -14px 12px -14px;
+                padding: 12px 14px;
+                font-size: 13px;
+                white-space: normal;
+                line-height: 1.35;
+            }
+
+            /* Textos de descrição dos tipos */
+            .tipo-card-descricao { max-width: 100%; white-space: normal; }
+
+            /* Tabela top5 */
+            #tabelaTop5 td:first-child { font-size: 13px; }
+
+            /* Auth */
+            .auth-card { padding: 26px 20px; }
+            .auth-header h1 { font-size: 17px; }
+            .auth-logo { width: 50px; height: 50px; }
+
+            /* Badges de categoria em cadastro */
+            .admin-info-box { font-size: 12px; padding: 12px 14px; }
+            .admin-info-box code { font-size: 11px; word-break: break-all; }
+        }
+
+        @media (max-width: 380px) {
+            .marquee-item { font-size: 12px; }
+            .panel-title { font-size: 14px; padding: 10px 14px; }
+            .dash-card-value { font-size: 16px; }
         }
 
         ::-webkit-scrollbar { width: 8px; height: 8px; }
@@ -2378,9 +2719,12 @@
         </div>
     </div>
 
+    <!-- OVERLAY DA SIDEBAR (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="fecharSidebar()"></div>
+
     <!-- APP PRINCIPAL -->
     <div class="container" id="appContainer">
-        <div class="sidebar">
+        <div class="sidebar" id="appSidebar">
             <div class="sidebar-header">
                 <div class="sidebar-title-row">
                     <svg class="mini-chart-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -2443,6 +2787,13 @@
 
         <div class="main-content">
             <div class="header">
+                <button class="mobile-menu-btn" onclick="abrirSidebar()" aria-label="Abrir menu">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
                 <div class="marquee">
                     <div class="marquee-track">
                         <div class="marquee-item">
@@ -3021,7 +3372,10 @@
                         <strong>ℹ️ Como adicionar novos usuários:</strong>
                         Abra o arquivo <code>index.html</code> no seu editor e localize a constante
                         <code>USUARIOS_PREDEFINIDOS</code>. Preencha os slots vazios com
-                        <code>{ usuario: 'nome', senha: 'senha' }</code> e salve o arquivo.
+                        <code>{ usuario: 'nome', senha: 'senha', sexo: 'F' }</code> ou
+                        <code>{ usuario: 'nome', senha: 'senha', sexo: 'M' }</code> e salve o arquivo.
+                        Use <strong>F</strong> para mulher e <strong>M</strong> para homem —
+                        isso define a saudação correta de boas-vindas.
                         As alterações estarão disponíveis no próximo carregamento da página.
                         <br><br>
                         <strong>🔒 Senhas protegidas:</strong> por padrão as senhas aparecem ocultas.
@@ -3039,6 +3393,7 @@
                                     <tr>
                                         <th style="width: 70px;">Slot</th>
                                         <th>Usuário</th>
+                                        <th>Sexo</th>
                                         <th>Senha</th>
                                         <th>Status</th>
                                         <th>Ações</th>
@@ -3112,26 +3467,31 @@
     <script>
         /* ============================================================
            🔐  LISTA DE USUÁRIOS PREDEFINIDOS (50 SLOTS)
+           ------------------------------------------------------------
+           Cada slot agora tem 3 campos entre aspas simples:
+             usuario: 'nome'
+             senha:   'senha'
+             sexo:    'F'  → mulher  |  'M' → homem  |  '' → usar regra pelo nome
            ============================================================ */
         const USUARIOS_PREDEFINIDOS = [
-            { usuario: 'admin', senha: '@Aa147852;', admin: true },
-            { usuario: 'Dauenne', senha: 'adm0196' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
-            { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
-            { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
-            { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
-            { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
-            { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
-            { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
-            { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
-            { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
-            { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
-            { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
-            { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
-            { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
-            { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
-            { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
-            { usuario: '', senha: '' }, { usuario: '', senha: '' }, { usuario: '', senha: '' },
-            { usuario: '', senha: '' }
+            { usuario: 'admin', senha: '@Aa147852;', admin: true, sexo: 'M' },
+            { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: '', senha: '', sexo: '' }
         ];
 
         const SENHA_PAINEL_ADMIN = '@Aa147852;';
@@ -3164,35 +3524,58 @@
         // ============================================================
         const TIPOS_PADRAO = [
             // RECEITAS
-            { id: 1,  nome: 'Salário',          categoria: 'receita', descricao: '' },
-            { id: 2,  nome: 'Venda',            categoria: 'receita', descricao: '' },
-            { id: 3,  nome: 'Empréstimo',       categoria: 'receita', descricao: '' },
-            { id: 4,  nome: 'Férias',           categoria: 'receita', descricao: '' },
-            { id: 5,  nome: 'Décimo',           categoria: 'receita', descricao: '' },
-            { id: 6,  nome: 'Premiação',        categoria: 'receita', descricao: '' },
-            { id: 7,  nome: 'Serviço',          categoria: 'receita', descricao: '' },
-            { id: 8,  nome: 'Aluguel',          categoria: 'receita', descricao: '' },
+            { id: 1,  nome: 'Salário',            categoria: 'receita', descricao: '' },
+            { id: 2,  nome: 'Venda',              categoria: 'receita', descricao: '' },
+            { id: 3,  nome: 'Empréstimo',         categoria: 'receita', descricao: '' },
+            { id: 4,  nome: 'Férias',             categoria: 'receita', descricao: '' },
+            { id: 5,  nome: 'Décimo',             categoria: 'receita', descricao: '' },
+            { id: 6,  nome: 'Premiação',          categoria: 'receita', descricao: '' },
+            { id: 7,  nome: 'Serviço',            categoria: 'receita', descricao: '' },
+            { id: 8,  nome: 'Aluguel',            categoria: 'receita', descricao: '' },
             // DESPESAS
-            { id: 9,  nome: 'Salário',          categoria: 'despesa', descricao: '' },
-            { id: 10, nome: 'Compra',           categoria: 'despesa', descricao: '' },
-            { id: 11, nome: 'Empréstimo',       categoria: 'despesa', descricao: '' },
-            { id: 12, nome: 'Férias',           categoria: 'despesa', descricao: '' },
-            { id: 13, nome: 'Décimo',           categoria: 'despesa', descricao: '' },
-            { id: 14, nome: 'Premiação',        categoria: 'despesa', descricao: '' },
-            { id: 15, nome: 'Serviço',          categoria: 'despesa', descricao: '' },
-            { id: 16, nome: 'Aluguel',          categoria: 'despesa', descricao: '' },
-            { id: 17, nome: 'Parcela da casa',  categoria: 'despesa', descricao: '' },
-            { id: 18, nome: 'Conta de luz',     categoria: 'despesa', descricao: '' },
-            { id: 19, nome: 'Conta de água',    categoria: 'despesa', descricao: '' },
-            { id: 20, nome: 'Internet',         categoria: 'despesa', descricao: '' },
-            { id: 21, nome: 'Gás',              categoria: 'despesa', descricao: '' },
-            { id: 22, nome: 'Gasolina',         categoria: 'despesa', descricao: '' },
-            { id: 23, nome: 'Emplacamento',     categoria: 'despesa', descricao: '' },
-            { id: 24, nome: 'IPVA',             categoria: 'despesa', descricao: '' },
-            { id: 25, nome: 'IPTU',             categoria: 'despesa', descricao: '' }
+            { id: 9,  nome: 'Salário',            categoria: 'despesa', descricao: '' },
+            { id: 10, nome: 'Compra',             categoria: 'despesa', descricao: '' },
+            { id: 11, nome: 'Empréstimo',         categoria: 'despesa', descricao: '' },
+            { id: 12, nome: 'Férias',             categoria: 'despesa', descricao: '' },
+            { id: 13, nome: 'Décimo',             categoria: 'despesa', descricao: '' },
+            { id: 14, nome: 'Premiação',          categoria: 'despesa', descricao: '' },
+            { id: 15, nome: 'Serviço',            categoria: 'despesa', descricao: '' },
+            { id: 16, nome: 'Aluguel',            categoria: 'despesa', descricao: '' },
+            { id: 17, nome: 'Parcela da casa',    categoria: 'despesa', descricao: '' },
+            { id: 18, nome: 'Conta de luz',       categoria: 'despesa', descricao: '' },
+            { id: 19, nome: 'Conta de água',      categoria: 'despesa', descricao: '' },
+            { id: 20, nome: 'Internet',           categoria: 'despesa', descricao: '' },
+            { id: 21, nome: 'Gás',                categoria: 'despesa', descricao: '' },
+            { id: 22, nome: 'Gasolina',           categoria: 'despesa', descricao: '' },
+            { id: 23, nome: 'Emplacamento',       categoria: 'despesa', descricao: '' },
+            { id: 24, nome: 'IPVA',               categoria: 'despesa', descricao: '' },
+            { id: 25, nome: 'IPTU',               categoria: 'despesa', descricao: '' },
+            { id: 26, nome: 'Faculdade',          categoria: 'despesa', descricao: '' },
+            { id: 27, nome: 'Curso',              categoria: 'despesa', descricao: '' },
+            { id: 28, nome: 'Escola das crianças',categoria: 'despesa', descricao: '' }
         ];
 
-        let tipos = JSON.parse(localStorage.getItem('tipos')) || TIPOS_PADRAO;
+        // Carrega tipos do localStorage e migra tipos novos do padrão automaticamente
+        let tipos;
+        (function inicializarTipos() {
+            const salvos = JSON.parse(localStorage.getItem('tipos'));
+            if (!salvos || !Array.isArray(salvos)) {
+                tipos = TIPOS_PADRAO.map(t => ({ ...t }));
+                return;
+            }
+            tipos = salvos;
+            // Verifica se algum tipo do padrão está faltando e adiciona
+            const chavesExistentes = new Set(
+                tipos.map(t => (t.categoria || '').toLowerCase() + '|' + (t.nome || '').toLowerCase())
+            );
+            TIPOS_PADRAO.forEach(tp => {
+                const chave = tp.categoria.toLowerCase() + '|' + tp.nome.toLowerCase();
+                if (!chavesExistentes.has(chave)) {
+                    tipos.push({ ...tp, id: Date.now() + Math.random() });
+                }
+            });
+            localStorage.setItem('tipos', JSON.stringify(tipos));
+        })();
 
         // Sessão em sessionStorage (não persiste ao fechar o navegador)
         let sessao = JSON.parse(sessionStorage.getItem('cf_sessao')) || null;
@@ -3236,6 +3619,29 @@
                 <path d="M38 40 L52 40 L52 22" stroke="#10b981" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                 <polygon points="52,12 43,23 60,23" fill="#10b981"/>
             </svg>`;
+
+        /* ============================================================
+           MOBILE — SIDEBAR GAVETA
+           ============================================================ */
+        function abrirSidebar() {
+            const sb = document.getElementById('appSidebar');
+            const ov = document.getElementById('sidebarOverlay');
+            if (sb) sb.classList.add('open');
+            if (ov) ov.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+        function fecharSidebar() {
+            const sb = document.getElementById('appSidebar');
+            const ov = document.getElementById('sidebarOverlay');
+            if (sb) sb.classList.remove('open');
+            if (ov) ov.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        function toggleSidebar() {
+            const sb = document.getElementById('appSidebar');
+            if (sb && sb.classList.contains('open')) fecharSidebar();
+            else abrirSidebar();
+        }
 
         /* ============================================================
            AVISO CUSTOMIZADO
@@ -3402,19 +3808,27 @@
             return 'Boa noite';
         }
 
-        function isNomeFeminino(nome) {
+        // Determina se o usuário é mulher. Prioridade:
+        // 1) Campo 'sexo' da sessão (F = mulher, M = homem)
+        // 2) Exceções femininas conhecidas ('dauenne')
+        // 3) Exceções masculinas
+        // 4) Regra do sufixo "a" (feminino)
+        function isNomeFeminino(nome, sexo) {
+            // 1) Sexo informado explicitamente
+            if (sexo) {
+                const s = String(sexo).trim().toUpperCase();
+                if (s === 'F') return true;
+                if (s === 'M') return false;
+            }
+
             if (!nome) return false;
             const n = nome.trim().toLowerCase();
 
-            // Exceções femininas: nomes que NÃO terminam em "a", mas são femininos.
-            // Dauenne é sempre tratado como nome de mulher.
-            const excecoesFemininas = [
-                'dauenne'
-            ];
+            // 2) Exceções femininas (nomes que não terminam em "a")
+            const excecoesFemininas = ['dauenne'];
             if (excecoesFemininas.includes(n)) return true;
 
-            // Exceções masculinas: nomes que terminam em "a" (ou não),
-            // mas são masculinos.
+            // 3) Exceções masculinas
             const excecoesMasculinas = [
                 'luca', 'joshua', 'nikita', 'sasha', 'elias', 'isaías', 'isaias',
                 'tomás', 'tomas', 'nicolas', 'matias', 'jeremias', 'zacarias',
@@ -3422,7 +3836,7 @@
             ];
             if (excecoesMasculinas.includes(n)) return false;
 
-            // Regra geral: termina em "a" (mas não em "ão") → feminino.
+            // 4) Regra geral: termina em "a" (mas não em "ão") → feminino
             if (/a$/.test(n) && !/ão$/.test(n)) return true;
 
             return false;
@@ -3432,7 +3846,7 @@
             if (!sessao || !sessao.usuario) return '';
             const saudacao = obterSaudacao();
             const nome = sessao.usuario;
-            const bemVindo = isNomeFeminino(nome) ? 'Seja Bem-Vinda' : 'Seja Bem-Vindo';
+            const bemVindo = isNomeFeminino(nome, sessao.sexo) ? 'Seja Bem-Vinda' : 'Seja Bem-Vindo';
             return `${saudacao}, <span class="nome-destaque">${nome}</span>, ` +
                    `<span class="saudacao-destaque">${bemVindo}</span> ao Controle Financeiro`;
         }
@@ -3494,6 +3908,7 @@
         function mostrarAuth() {
             document.getElementById('authOverlay').classList.remove('hidden');
             document.getElementById('appContainer').style.visibility = 'hidden';
+            fecharSidebar();
         }
 
         function esconderAuth() {
@@ -3516,7 +3931,13 @@
             const senhaCorreta = obterSenhaAtual(usuario);
             if (senha !== senhaCorreta) return mostrarMensagemLogin('❌ Usuário ou senha incorretos.', 'error');
 
-            sessao = { usuario: u.usuario, isAdmin: !!u.admin, loginTime: Date.now() };
+            // Guarda o sexo (F/M) na sessão para usar na saudação
+            sessao = {
+                usuario: u.usuario,
+                isAdmin: !!u.admin,
+                sexo: (u.sexo || '').trim().toUpperCase(),
+                loginTime: Date.now()
+            };
             salvarSessao();
 
             document.getElementById('loginUsuario').value = '';
@@ -3536,6 +3957,7 @@
             adminUnlocked = false;
             senhasReveladas.clear();
             pararAtualizacaoBoasVindas();
+            fecharSidebar();
             document.getElementById('loginUsuario').value = '';
             document.getElementById('loginSenha').value = '';
             limparMensagemLogin();
@@ -3709,6 +4131,13 @@
         /* ============================================================
            ADMIN
            ============================================================ */
+        function badgeSexo(sexo) {
+            const s = String(sexo || '').trim().toUpperCase();
+            if (s === 'F') return '<span class="status-badge status-sexo-f">F · Mulher</span>';
+            if (s === 'M') return '<span class="status-badge status-sexo-m">M · Homem</span>';
+            return '<span class="status-badge status-sexo-vazio">Não informado</span>';
+        }
+
         function renderizarUsuarios() {
             const tbody = document.getElementById('tabelaUsuariosBody');
             const empty = document.getElementById('emptyStateUsuarios');
@@ -3746,6 +4175,7 @@
                 row.innerHTML = `
                     <td><span class="admin-slot">#${String(u.slot).padStart(2, '0')}</span></td>
                     <td><strong>${u.usuario}</strong></td>
+                    <td>${badgeSexo(u.sexo)}</td>
                     <td><span class="admin-pass ${revelada ? '' : 'masked'}">${senhaExibida}</span></td>
                     <td>${statusBadge}</td>
                     <td>
@@ -4634,7 +5064,7 @@
 
             tiposOrdenados.forEach(tipo => {
                 const card = document.createElement('div');
-                card.style.cssText = 'background: var(--bg-elevated); padding: 12px; border-radius: 6px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-subtle); gap: 12px;';
+                card.style.cssText = 'background: var(--bg-elevated); padding: 12px; border-radius: 6px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-subtle); gap: 12px; flex-wrap: wrap;';
                 const descHtml = tipo.descricao && tipo.descricao.trim() !== ''
                     ? `<div class="tipo-card-descricao" title="${tipo.descricao.replace(/"/g, '&quot;')}">📝 ${tipo.descricao}</div>`
                     : '';
@@ -4789,6 +5219,9 @@
            NAVEGAÇÃO ENTRE PAINÉIS
            ============================================================ */
         function mostrarPainel(painel) {
+            // Fecha sidebar no mobile ao trocar de painel
+            if (window.innerWidth <= 768) fecharSidebar();
+
             if (painel === 'admin' && (!sessao || !sessao.isAdmin)) {
                 mostrarAviso('🔒 Acesso restrito ao administrador.');
                 return;
@@ -5729,6 +6162,7 @@
                 fecharModalAdminPass();
                 const aviso = document.getElementById('modalAviso');
                 if (aviso && aviso.classList.contains('show')) fecharAviso();
+                fecharSidebar();
             }
             if (e.key === 'Enter') {
                 const aviso = document.getElementById('modalAviso');
@@ -5744,6 +6178,11 @@
                 e.preventDefault();
                 confirmarAdminPass();
             }
+        });
+
+        // Fecha a sidebar automaticamente se o usuário redimensionar para PC
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) fecharSidebar();
         });
 
         window.addEventListener('load', () => {
@@ -5763,7 +6202,11 @@
             let sessaoValida = false;
             if (sessao && sessao.usuario) {
                 const u = USUARIOS_PREDEFINIDOS.find(x => x.usuario === sessao.usuario);
-                if (u) sessaoValida = true;
+                if (u) {
+                    sessaoValida = true;
+                    // Garante que o sexo esteja na sessão (compatibilidade com sessões antigas)
+                    if (!sessao.sexo) sessao.sexo = (u.sexo || '').trim().toUpperCase();
+                }
             }
 
             if (sessaoValida) {
