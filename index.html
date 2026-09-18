@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Controle Financeiro Pessoal</title>
+
+    <!-- ========== PWA META TAGS ========== -->
+    <meta name="theme-color" content="#0D2E4A">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Controle Financeiro">
+    <meta name="application-name" content="Controle Financeiro">
+    <meta name="description" content="A Ferramenta Para Gerenciar a Sua Vida Financeira">
+    <meta name="format-detection" content="telephone=no">
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
@@ -2375,6 +2386,127 @@
             text-overflow: ellipsis;
         }
 
+        /* ========== BOTÃO INSTALAR PWA ========== */
+        .btn-install-pwa {
+            position: relative;
+            height: 44px;
+            padding: 0 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 229, 255, 0.45);
+            background:
+                radial-gradient(circle at 30% 20%, rgba(255,255,255,0.12) 0%, transparent 55%),
+                linear-gradient(180deg, #1f4563 0%, #0a2842 55%, #05192b 100%);
+            color: #ffffff;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.16),
+                inset 0 -1px 0 rgba(0, 229, 255, 0.40),
+                0 3px 10px rgba(0, 0, 0, 0.3),
+                0 0 0 1px rgba(0, 0, 0, 0.25),
+                0 0 18px rgba(0, 229, 255, 0.18);
+            flex-shrink: 0;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            font-family: inherit;
+            animation: pulseInstall 2.6s ease-in-out infinite;
+        }
+        @keyframes pulseInstall {
+            0%, 100% {
+                box-shadow:
+                    inset 0 1px 0 rgba(255,255,255,0.16),
+                    inset 0 -1px 0 rgba(0, 229, 255, 0.40),
+                    0 3px 10px rgba(0, 0, 0, 0.3),
+                    0 0 0 1px rgba(0, 0, 0, 0.25),
+                    0 0 18px rgba(0, 229, 255, 0.18);
+            }
+            50% {
+                box-shadow:
+                    inset 0 1px 0 rgba(255,255,255,0.20),
+                    inset 0 -1px 0 rgba(0, 229, 255, 0.60),
+                    0 3px 12px rgba(0, 0, 0, 0.35),
+                    0 0 0 1px rgba(0, 229, 255, 0.55),
+                    0 0 26px rgba(0, 229, 255, 0.45);
+            }
+        }
+        .btn-install-pwa svg {
+            width: 18px;
+            height: 18px;
+            stroke: #ffffff;
+            fill: none;
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter:
+                drop-shadow(0 0 4px rgba(255, 255, 255, 0.95))
+                drop-shadow(0 0 10px rgba(0, 229, 255, 0.55));
+            transition: filter 0.3s ease, transform 0.3s ease;
+            flex-shrink: 0;
+        }
+        .btn-install-pwa:hover {
+            transform: translateY(-2px);
+            border-color: rgba(0, 229, 255, 0.85);
+            box-shadow:
+                inset 0 1px 0 rgba(255,255,255,0.25),
+                inset 0 -1px 0 rgba(0, 229, 255, 0.75),
+                0 6px 16px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(0, 229, 255, 0.75),
+                0 0 26px rgba(0, 229, 255, 0.55);
+        }
+        .btn-install-pwa:hover svg {
+            transform: translateY(2px) scale(1.08);
+            filter:
+                drop-shadow(0 0 6px rgba(255, 255, 255, 1))
+                drop-shadow(0 0 14px rgba(255, 255, 255, 0.85))
+                drop-shadow(0 0 22px rgba(0, 229, 255, 0.85));
+        }
+        .btn-install-pwa.hidden { display: none !important; }
+
+        .modal-instalar .modal-content {
+            max-width: 480px;
+            animation: avisoFadeIn 0.3s ease-out;
+        }
+        .modal-instalar .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 17px;
+        }
+        .modal-instalar ol {
+            margin-left: 20px;
+            line-height: 1.85;
+            padding-left: 4px;
+        }
+        .modal-instalar ol li { margin-bottom: 4px; }
+        .modal-instalar .dica-box {
+            margin-top: 16px;
+            padding: 11px 13px;
+            background: rgba(0, 229, 255, 0.08);
+            border-left: 3px solid var(--neon-azul);
+            border-radius: 5px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .btn-install-pwa {
+                height: 40px;
+                padding: 0 11px;
+                border-radius: 10px;
+            }
+            .btn-install-pwa .btn-install-pwa-label { display: none; }
+            .btn-install-pwa svg { width: 20px; height: 20px; }
+        }
+        @media (max-width: 380px) {
+            .btn-install-pwa { padding: 0 8px; }
+        }
+
         /* ============================================================
            RESPONSIVO — TABLETS
            ============================================================ */
@@ -2420,7 +2552,6 @@
            RESPONSIVO — SMARTPHONE
            ============================================================ */
         @media (max-width: 768px) {
-            /* Sidebar como gaveta lateral */
             .sidebar {
                 position: fixed;
                 top: 0;
@@ -2443,10 +2574,9 @@
 
             .container { flex-direction: column; }
 
-            /* Header compacto */
             .header {
                 padding: 10px 14px;
-                gap: 10px;
+                gap: 8px;
             }
             .marquee-item { font-size: 14px; padding-right: 60px; }
             .btn-theme-global {
@@ -2456,7 +2586,6 @@
             }
             .btn-theme-global svg { width: 20px; height: 20px; }
 
-            /* Conteúdo */
             .content-area {
                 padding: 14px 12px calc(14px + env(safe-area-inset-bottom, 0));
             }
@@ -2467,7 +2596,6 @@
                 letter-spacing: 0.2px;
             }
 
-            /* Subtítulos / marquee de saudação */
             .panel-subtitle-row,
             .panel-subtitle-bar {
                 padding: 10px 12px;
@@ -2489,7 +2617,6 @@
             }
             .subtitle-marquee-item { font-size: 12.5px; padding-right: 40px; }
 
-            /* Form groups: sempre 1 coluna */
             .form-group,
             .form-group.align-top { grid-template-columns: 1fr; gap: 12px; }
             .form-group { margin-bottom: 12px; }
@@ -2511,21 +2638,17 @@
                 min-height: 42px;
             }
 
-            /* Filtros do dashboard */
             .dashboard-filters { grid-template-columns: 1fr; }
             .dashboard-filters .btn {
                 width: 100%;
                 grid-column: auto;
             }
 
-            /* Período alertas */
             .periodo-filtro { grid-template-columns: 1fr; }
 
-            /* Stat chips em largura cheia */
             .periodo-stats { width: 100%; flex-direction: column; }
             .stat-chip { min-width: 0; width: 100%; }
 
-            /* Toggle de dados do dashboard */
             .dash-dados-toggle {
                 flex-direction: column;
                 padding: 8px;
@@ -2539,7 +2662,6 @@
                 font-size: 11px;
             }
 
-            /* Cards do dashboard */
             .dashboard-cards {
                 grid-template-columns: 1fr;
                 height: auto;
@@ -2551,7 +2673,6 @@
             .dash-card-value { font-size: 18px; }
             .dash-card-label { font-size: 9.5px; letter-spacing: 0.8px; }
 
-            /* Toggle modo gráfico */
             .dash-mode-toggle { flex-direction: column; }
             .dash-mode-btn {
                 width: 100%;
@@ -2560,7 +2681,6 @@
                 font-size: 11px;
             }
 
-            /* Área de gráficos */
             .dash-view-area { padding: 10px; }
             .chart-title {
                 margin: -10px -10px 10px -10px;
@@ -2574,7 +2694,6 @@
             .chart-wrapper.tall { height: 260px; }
             .dash-comparison-grid { grid-template-columns: 1fr; }
 
-            /* Barra de modos do registro */
             .registro-modo-bar {
                 flex-direction: column;
                 align-items: stretch;
@@ -2593,7 +2712,6 @@
             }
             .btn-salvar-edicao { width: 100%; justify-content: center; }
 
-            /* Tabelas: scroll horizontal confortável */
             .table-container {
                 border-radius: 6px;
                 -webkit-overflow-scrolling: touch;
@@ -2614,7 +2732,6 @@
                 font-size: 10px;
             }
 
-            /* Botões */
             .btn {
                 padding: 12px 20px;
                 font-size: 12.5px;
@@ -2627,21 +2744,18 @@
             }
             .button-group .btn { width: 100%; }
 
-            /* Toggle status */
             .status-toggle-wrapper {
                 width: 100%;
                 max-width: 100%;
             }
             .status-toggle-btn { padding: 8px 4px; font-size: 10px; }
 
-            /* Modais */
             .modal { padding: 12px; }
             .modal-content { padding: 20px; border-radius: 10px; }
             .modal-header { font-size: 16px; }
             .modal-buttons { flex-direction: column-reverse; }
             .modal-buttons .btn { width: 100%; }
 
-            /* Card de cadastro */
             .card { padding: 14px; }
             .card-title {
                 margin: -14px -14px 12px -14px;
@@ -2651,18 +2765,14 @@
                 line-height: 1.35;
             }
 
-            /* Textos de descrição dos tipos */
             .tipo-card-descricao { max-width: 100%; white-space: normal; }
 
-            /* Tabela top5 */
             #tabelaTop5 td:first-child { font-size: 13px; }
 
-            /* Auth */
             .auth-card { padding: 26px 20px; }
             .auth-header h1 { font-size: 17px; }
             .auth-logo { width: 50px; height: 50px; }
 
-            /* Badges de categoria em cadastro */
             .admin-info-box { font-size: 12px; padding: 12px 14px; }
             .admin-info-box code { font-size: 11px; word-break: break-all; }
         }
@@ -3461,22 +3571,31 @@
         </div>
     </div>
 
+    <!-- MODAL INSTALAR APP (PWA) -->
+    <div id="modalInstalar" class="modal modal-instalar">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span style="font-size: 22px;">📱</span>
+                <span>Instalar Aplicativo</span>
+            </div>
+            <div class="modal-body" id="modalInstalarBody"></div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="fecharModalInstalar()">Entendi</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
     <script>
         /* ============================================================
            🔐  LISTA DE USUÁRIOS PREDEFINIDOS (50 SLOTS)
-           ------------------------------------------------------------
-           Cada slot agora tem 3 campos entre aspas simples:
-             usuario: 'nome'
-             senha:   'senha'
-             sexo:    'F'  → mulher  |  'M' → homem  |  '' → usar regra pelo nome
            ============================================================ */
         const USUARIOS_PREDEFINIDOS = [
             { usuario: 'admin', senha: '@Aa147852;', admin: true, sexo: 'M' },
-            { usuario: 'Dauenne', senha: '0196', sexo: 'F' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
-            { usuario: 'Ronison', senha: '147852', sexo: 'M' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: 'Dauenne', senha: '0196', sexo: 'F' }, { usuario: 'Ronison', senha: '147852', sexo: 'M' }, { usuario: '', senha: '', sexo: '' },
+            { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
             { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
             { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
             { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' }, { usuario: '', senha: '', sexo: '' },
@@ -3519,11 +3638,7 @@
            ============================================================ */
         let movimentacoes = JSON.parse(localStorage.getItem('movimentacoes')) || [];
 
-        // ============================================================
-        // TIPOS PADRÃO — Receitas e Despesas pré-cadastradas
-        // ============================================================
         const TIPOS_PADRAO = [
-            // RECEITAS
             { id: 1,  nome: 'Salário',            categoria: 'receita', descricao: '' },
             { id: 2,  nome: 'Venda',              categoria: 'receita', descricao: '' },
             { id: 3,  nome: 'Empréstimo',         categoria: 'receita', descricao: '' },
@@ -3532,7 +3647,6 @@
             { id: 6,  nome: 'Premiação',          categoria: 'receita', descricao: '' },
             { id: 7,  nome: 'Serviço',            categoria: 'receita', descricao: '' },
             { id: 8,  nome: 'Aluguel',            categoria: 'receita', descricao: '' },
-            // DESPESAS
             { id: 9,  nome: 'Salário',            categoria: 'despesa', descricao: '' },
             { id: 10, nome: 'Compra',             categoria: 'despesa', descricao: '' },
             { id: 11, nome: 'Empréstimo',         categoria: 'despesa', descricao: '' },
@@ -3555,7 +3669,6 @@
             { id: 28, nome: 'Escola das crianças',categoria: 'despesa', descricao: '' }
         ];
 
-        // Carrega tipos do localStorage e migra tipos novos do padrão automaticamente
         let tipos;
         (function inicializarTipos() {
             const salvos = JSON.parse(localStorage.getItem('tipos'));
@@ -3564,7 +3677,6 @@
                 return;
             }
             tipos = salvos;
-            // Verifica se algum tipo do padrão está faltando e adiciona
             const chavesExistentes = new Set(
                 tipos.map(t => (t.categoria || '').toLowerCase() + '|' + (t.nome || '').toLowerCase())
             );
@@ -3577,7 +3689,6 @@
             localStorage.setItem('tipos', JSON.stringify(tipos));
         })();
 
-        // Sessão em sessionStorage (não persiste ao fechar o navegador)
         let sessao = JSON.parse(sessionStorage.getItem('cf_sessao')) || null;
 
         let acaoConfirmada = null;
@@ -3601,6 +3712,12 @@
         let edicoesPendentes = {};
 
         let tipoEditandoId = null;
+
+        /* ============================================================
+           📱 PWA — ESTADO
+           ============================================================ */
+        let deferredInstallPrompt = null;
+        let pwaJaInstalado = false;
 
         const SVG_MINI_DOWN = `
             <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
@@ -3808,37 +3925,23 @@
             return 'Boa noite';
         }
 
-        // Determina se o usuário é mulher. Prioridade:
-        // 1) Campo 'sexo' da sessão (F = mulher, M = homem)
-        // 2) Exceções femininas conhecidas ('dauenne')
-        // 3) Exceções masculinas
-        // 4) Regra do sufixo "a" (feminino)
         function isNomeFeminino(nome, sexo) {
-            // 1) Sexo informado explicitamente
             if (sexo) {
                 const s = String(sexo).trim().toUpperCase();
                 if (s === 'F') return true;
                 if (s === 'M') return false;
             }
-
             if (!nome) return false;
             const n = nome.trim().toLowerCase();
-
-            // 2) Exceções femininas (nomes que não terminam em "a")
             const excecoesFemininas = ['dauenne'];
             if (excecoesFemininas.includes(n)) return true;
-
-            // 3) Exceções masculinas
             const excecoesMasculinas = [
                 'luca', 'joshua', 'nikita', 'sasha', 'elias', 'isaías', 'isaias',
                 'tomás', 'tomas', 'nicolas', 'matias', 'jeremias', 'zacarias',
                 'admin', 'administrador', 'adm', 'gestor', 'gerente', 'root'
             ];
             if (excecoesMasculinas.includes(n)) return false;
-
-            // 4) Regra geral: termina em "a" (mas não em "ão") → feminino
             if (/a$/.test(n) && !/ão$/.test(n)) return true;
-
             return false;
         }
 
@@ -3886,8 +3989,6 @@
         /* ============================================================
            AUTENTICAÇÃO
            ============================================================ */
-        // Sessão em sessionStorage: sobrevive a refresh do F5,
-        // mas é descartada quando a aba/navegador é fechado.
         function salvarSessao() {
             if (sessao) sessionStorage.setItem('cf_sessao', JSON.stringify(sessao));
             else sessionStorage.removeItem('cf_sessao');
@@ -3931,7 +4032,6 @@
             const senhaCorreta = obterSenhaAtual(usuario);
             if (senha !== senhaCorreta) return mostrarMensagemLogin('❌ Usuário ou senha incorretos.', 'error');
 
-            // Guarda o sexo (F/M) na sessão para usar na saudação
             sessao = {
                 usuario: u.usuario,
                 isAdmin: !!u.admin,
@@ -3987,7 +4087,6 @@
                 especificos.classList.toggle('hidden', modoDadosDashboard !== 'especificos');
             }
 
-            // Sempre abre na tela de Cadastro de Despesas/Receitas
             mostrarPainelInterno('cadastro');
             atualizarTodosPaineis();
         }
@@ -4045,6 +4144,10 @@
             else document.body.classList.remove('theme-dark');
             localStorage.setItem('cf_theme', tema);
 
+            // Atualiza cor da barra de status no PWA
+            const metaTheme = document.querySelector('meta[name="theme-color"]');
+            if (metaTheme) metaTheme.setAttribute('content', tema === 'dark' ? '#0a1725' : '#0D2E4A');
+
             const btn = document.getElementById('themeToggleBtn');
             if (btn) {
                 btn.innerHTML = tema === 'dark' ? SVG_ICON_SUN : SVG_ICON_MOON;
@@ -4083,7 +4186,7 @@
         }
 
         /* ============================================================
-           DASHBOARD — MUDANÇA DE MODO COM TRANSIÇÃO SUAVE
+           DASHBOARD — MUDANÇA DE MODO
            ============================================================ */
         function mudarModoDadosDashboard(modo) {
             if (modo !== 'gerais' && modo !== 'especificos') return;
@@ -5054,7 +5157,6 @@
                 return;
             }
 
-            // Ordena: receitas primeiro, depois despesas (alfabético dentro de cada)
             const tiposOrdenados = [...tipos].sort((a, b) => {
                 if (a.categoria !== b.categoria) {
                     return a.categoria === 'receita' ? -1 : 1;
@@ -5155,7 +5257,6 @@
             }
 
             if (tipoEditandoId !== null) {
-                // Edição
                 const tipo = tipos.find(t => String(t.id) === String(tipoEditandoId));
                 if (!tipo) {
                     tipoEditandoId = null;
@@ -5172,7 +5273,6 @@
                 atualizarFiltroTiposDashboard();
                 mostrarAviso('✅ Tipo atualizado com sucesso!');
             } else {
-                // Novo cadastro
                 tipos.push({ id: Date.now(), nome, categoria, descricao });
                 salvarTipos();
                 document.getElementById('tipoCadastro').value = '';
@@ -5192,7 +5292,6 @@
                 tipos = tipos.filter(t => t.id !== id);
                 salvarTipos();
 
-                // Se estava editando este tipo, cancela a edição
                 if (String(tipoEditandoId) === String(id)) {
                     cancelarEdicaoTipo();
                 }
@@ -5205,7 +5304,6 @@
         }
 
         function limparCadastro() {
-            // Se estava editando, cancela a edição primeiro
             if (tipoEditandoId !== null) {
                 cancelarEdicaoTipo();
                 return;
@@ -5219,7 +5317,6 @@
            NAVEGAÇÃO ENTRE PAINÉIS
            ============================================================ */
         function mostrarPainel(painel) {
-            // Fecha sidebar no mobile ao trocar de painel
             if (window.innerWidth <= 768) fecharSidebar();
 
             if (painel === 'admin' && (!sessao || !sessao.isAdmin)) {
@@ -5312,6 +5409,7 @@
                 if (e.target.closest('#modalAviso')) return;
                 if (e.target.closest('#modalAdminPass')) return;
                 if (e.target.closest('#modalConfirm')) return;
+                if (e.target.closest('#modalInstalar')) return;
                 if (e.target.closest('#tabelaRegistroBody')) return;
 
                 const alvo = e.target;
@@ -5325,6 +5423,7 @@
                                   !el.closest('#modalAviso') &&
                                   !el.closest('#modalAdminPass') &&
                                   !el.closest('#modalConfirm') &&
+                                  !el.closest('#modalInstalar') &&
                                   !el.closest('#tabelaRegistroBody'));
 
                 const idx = campos.indexOf(alvo);
@@ -6154,12 +6253,345 @@
         }
 
         /* ============================================================
+           📱 PWA — TRANSFORMAR SITE EM APLICATIVO
+           ============================================================ */
+        function isPWAInstalado() {
+            return window.matchMedia('(display-mode: standalone)').matches ||
+                   window.navigator.standalone === true ||
+                   document.referrer.includes('android-app://');
+        }
+        function isIOS() {
+            return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        }
+        function isAndroid() {
+            return /Android/i.test(navigator.userAgent);
+        }
+
+        /* Gera os ícones PNG do app via canvas */
+        function gerarIconePNG(size) {
+            return new Promise((resolve) => {
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+
+                const grad = ctx.createLinearGradient(0, 0, size, size);
+                grad.addColorStop(0, '#1f4a6b');
+                grad.addColorStop(0.5, '#0D2E4A');
+                grad.addColorStop(1, '#05192b');
+                ctx.fillStyle = grad;
+
+                const r = size * 0.22;
+                ctx.beginPath();
+                ctx.moveTo(r, 0);
+                ctx.lineTo(size - r, 0);
+                ctx.quadraticCurveTo(size, 0, size, r);
+                ctx.lineTo(size, size - r);
+                ctx.quadraticCurveTo(size, size, size - r, size);
+                ctx.lineTo(r, size);
+                ctx.quadraticCurveTo(0, size, 0, size - r);
+                ctx.lineTo(0, r);
+                ctx.quadraticCurveTo(0, 0, r, 0);
+                ctx.closePath();
+                ctx.fill();
+
+                const barWidth = size * 0.105;
+                const bars = [
+                    { x: 0.15, y: 0.55, h: 0.28, color: '#8ab4d1' },
+                    { x: 0.325, y: 0.42, h: 0.41, color: '#a7c8de' },
+                    { x: 0.50, y: 0.30, h: 0.53, color: '#8ab4d1' },
+                    { x: 0.675, y: 0.18, h: 0.65, color: '#a7c8de' }
+                ];
+                bars.forEach(b => {
+                    ctx.fillStyle = b.color;
+                    const x = size * b.x;
+                    const y = size * b.y;
+                    const w = barWidth;
+                    const h = size * b.h;
+                    const br = w * 0.18;
+                    ctx.beginPath();
+                    ctx.moveTo(x + br, y);
+                    ctx.lineTo(x + w - br, y);
+                    ctx.quadraticCurveTo(x + w, y, x + w, y + br);
+                    ctx.lineTo(x + w, y + h - br);
+                    ctx.quadraticCurveTo(x + w, y + h, x + w - br, y + h);
+                    ctx.lineTo(x + br, y + h);
+                    ctx.quadraticCurveTo(x, y + h, x, y + h - br);
+                    ctx.lineTo(x, y + br);
+                    ctx.quadraticCurveTo(x, y, x + br, y);
+                    ctx.closePath();
+                    ctx.fill();
+                });
+
+                ctx.strokeStyle = '#10b981';
+                ctx.lineWidth = size * 0.055;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.beginPath();
+                ctx.moveTo(size * 0.16, size * 0.36);
+                ctx.lineTo(size * 0.33, size * 0.22);
+                ctx.lineTo(size * 0.50, size * 0.30);
+                ctx.lineTo(size * 0.72, size * 0.10);
+                ctx.stroke();
+
+                ctx.fillStyle = '#10b981';
+                ctx.beginPath();
+                ctx.moveTo(size * 0.72, size * 0.05);
+                ctx.lineTo(size * 0.61, size * 0.12);
+                ctx.lineTo(size * 0.74, size * 0.19);
+                ctx.closePath();
+                ctx.fill();
+
+                resolve(canvas.toDataURL('image/png'));
+            });
+        }
+
+        /* Cria e injeta o manifest.json dinamicamente */
+        async function criarManifestoPWA() {
+            try {
+                const icon192 = await gerarIconePNG(192);
+                const icon512 = await gerarIconePNG(512);
+
+                const manifest = {
+                    name: "Controle Financeiro Pessoal",
+                    short_name: "Controle Fin.",
+                    description: "A Ferramenta Para Gerenciar a Sua Vida Financeira",
+                    start_url: "./",
+                    scope: "./",
+                    display: "standalone",
+                    display_override: ["standalone", "minimal-ui"],
+                    orientation: "portrait-primary",
+                    background_color: "#0D2E4A",
+                    theme_color: "#0D2E4A",
+                    lang: "pt-BR",
+                    dir: "ltr",
+                    categories: ["finance", "productivity", "business"],
+                    icons: [
+                        { src: icon192, sizes: "192x192", type: "image/png", purpose: "any" },
+                        { src: icon512, sizes: "512x512", type: "image/png", purpose: "any" },
+                        { src: icon512, sizes: "512x512", type: "image/png", purpose: "maskable" }
+                    ]
+                };
+
+                const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+                const url = URL.createObjectURL(blob);
+
+                const link = document.createElement('link');
+                link.rel = 'manifest';
+                link.href = url;
+                document.head.appendChild(link);
+
+                const apple = document.createElement('link');
+                apple.rel = 'apple-touch-icon';
+                apple.href = icon192;
+                document.head.appendChild(apple);
+
+                const applePrecomposed = document.createElement('link');
+                applePrecomposed.rel = 'apple-touch-icon-precomposed';
+                applePrecomposed.href = icon192;
+                document.head.appendChild(applePrecomposed);
+
+                const fav = document.createElement('link');
+                fav.rel = 'icon';
+                fav.type = 'image/png';
+                fav.href = icon192;
+                document.head.appendChild(fav);
+
+                console.log('✅ Manifesto PWA injetado com sucesso.');
+            } catch (e) {
+                console.warn('⚠️ Falha ao criar manifesto PWA:', e);
+            }
+        }
+
+        /* Tenta registrar o service worker (opcional) */
+        function registrarServiceWorkerPWA() {
+            if (!('serviceWorker' in navigator)) return;
+            if (location.protocol === 'file:') return;
+
+            navigator.serviceWorker.register('sw.js', { scope: './' })
+                .then(reg => console.log('✅ Service Worker registrado:', reg.scope))
+                .catch(() => console.log('ℹ️ sw.js não encontrado — PWA funcionará em modo básico.'));
+        }
+
+        /* Injeta o botão "Instalar APP" no header */
+        function criarBotaoInstalarPWA() {
+            const header = document.querySelector('.header');
+            if (!header) return;
+            if (document.getElementById('pwaInstallBtn')) return;
+            if (pwaJaInstalado) return;
+
+            const btn = document.createElement('button');
+            btn.id = 'pwaInstallBtn';
+            btn.type = 'button';
+            btn.className = 'btn-install-pwa';
+            btn.title = 'Instalar aplicativo na tela inicial';
+            btn.setAttribute('aria-label', 'Instalar aplicativo');
+            btn.innerHTML = `
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M12 3v12"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="4" y1="20" x2="20" y2="20"/>
+                </svg>
+                <span class="btn-install-pwa-label">Instalar APP</span>
+            `;
+            btn.addEventListener('click', acionarInstalacaoPWA);
+
+            const themeBtn = document.getElementById('themeToggleBtn');
+            if (themeBtn && themeBtn.parentNode === header) {
+                header.insertBefore(btn, themeBtn);
+            } else {
+                header.appendChild(btn);
+            }
+        }
+
+        /* Aciona a instalação */
+        async function acionarInstalacaoPWA() {
+            if (pwaJaInstalado) {
+                mostrarAviso('✅ O aplicativo já está instalado no seu dispositivo.');
+                return;
+            }
+
+            if (deferredInstallPrompt) {
+                try {
+                    deferredInstallPrompt.prompt();
+                    const { outcome } = await deferredInstallPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        pwaJaInstalado = true;
+                        const btn = document.getElementById('pwaInstallBtn');
+                        if (btn) btn.classList.add('hidden');
+                        mostrarAviso('🎉 Aplicativo instalado com sucesso!');
+                    }
+                    deferredInstallPrompt = null;
+                } catch (err) {
+                    console.warn('Erro na instalação:', err);
+                    mostrarInstrucoesInstalacao();
+                }
+                return;
+            }
+
+            mostrarInstrucoesInstalacao();
+        }
+
+        /* Modal com instruções passo a passo */
+        function mostrarInstrucoesInstalacao() {
+            const body = document.getElementById('modalInstalarBody');
+            if (!body) return;
+
+            let html = '';
+
+            if (isIOS()) {
+                html = `
+                    <p style="margin-bottom: 14px;">Para instalar no seu <strong>iPhone / iPad</strong>:</p>
+                    <ol>
+                        <li>Toque no botão <strong>Compartilhar</strong>
+                            <span style="font-size: 17px;">⬆️</span> (barra inferior do Safari)</li>
+                        <li>Role a lista e toque em
+                            <strong>"Adicionar à Tela de Início"</strong>
+                            <span style="font-size: 17px;">➕</span></li>
+                        <li>Confirme em <strong>"Adicionar"</strong></li>
+                    </ol>
+                    <div class="dica-box">
+                        ⚠️ Utilize o navegador <strong>Safari</strong> — outros navegadores no iOS
+                        (Chrome, Firefox) não oferecem a opção de adicionar à tela de início.
+                    </div>
+                `;
+            } else if (isAndroid()) {
+                html = `
+                    <p style="margin-bottom: 14px;">Para instalar no seu <strong>Android</strong>:</p>
+                    <ol>
+                        <li>Toque no menu <strong>⋮</strong> (três pontos) do navegador</li>
+                        <li>Toque em <strong>"Instalar aplicativo"</strong> ou
+                            <strong>"Adicionar à tela inicial"</strong></li>
+                        <li>Confirme a instalação</li>
+                    </ol>
+                    <div class="dica-box">
+                        💡 Recomendamos o <strong>Chrome</strong> para melhor compatibilidade.
+                        Se o botão "Instalar APP" aparecer no topo, toque nele para instalar direto.
+                    </div>
+                `;
+            } else {
+                html = `
+                    <p style="margin-bottom: 14px;">Para instalar o aplicativo no seu computador:</p>
+                    <ol>
+                        <li>Procure o ícone de <strong>instalação</strong>
+                            <span style="font-size: 15px;">⬇️</span> na barra de endereços do navegador
+                            (Chrome/Edge)</li>
+                        <li>Ou abra o menu do navegador e procure
+                            <strong>"Instalar aplicativo"</strong></li>
+                        <li>Confirme a instalação</li>
+                    </ol>
+                    <div class="dica-box">
+                        💡 O aplicativo ficará disponível como um programa independente
+                        no seu computador, com ícone próprio.
+                    </div>
+                `;
+            }
+
+            body.innerHTML = html;
+            document.getElementById('modalInstalar').classList.add('show');
+        }
+
+        function fecharModalInstalar() {
+            const m = document.getElementById('modalInstalar');
+            if (m) m.classList.remove('show');
+        }
+
+        /* Inicialização geral da PWA */
+        async function inicializarPWA() {
+            pwaJaInstalado = isPWAInstalado();
+
+            await criarManifestoPWA();
+            registrarServiceWorkerPWA();
+
+            if (pwaJaInstalado) {
+                console.log('📱 App já instalado — modo standalone ativo.');
+                return;
+            }
+
+            criarBotaoInstalarPWA();
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredInstallPrompt = e;
+                criarBotaoInstalarPWA();
+                const btn = document.getElementById('pwaInstallBtn');
+                if (btn) btn.classList.remove('hidden');
+                console.log('📲 Prompt de instalação nativo disponível.');
+            });
+
+            window.addEventListener('appinstalled', () => {
+                console.log('🎉 PWA instalado com sucesso!');
+                pwaJaInstalado = true;
+                deferredInstallPrompt = null;
+                const btn = document.getElementById('pwaInstallBtn');
+                if (btn) btn.classList.add('hidden');
+                mostrarAviso('🎉 Aplicativo instalado com sucesso!');
+            });
+
+            try {
+                const mq = window.matchMedia('(display-mode: standalone)');
+                const handler = (ev) => {
+                    if (ev.matches) {
+                        pwaJaInstalado = true;
+                        const btn = document.getElementById('pwaInstallBtn');
+                        if (btn) btn.classList.add('hidden');
+                    }
+                };
+                if (mq.addEventListener) mq.addEventListener('change', handler);
+                else if (mq.addListener) mq.addListener(handler);
+            } catch (e) { /* ignore */ }
+
+            console.log('📱 PWA pronta. Botão "Instalar APP" disponível no cabeçalho.');
+        }
+
+        /* ============================================================
            INICIALIZAÇÃO
            ============================================================ */
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 fecharModal();
                 fecharModalAdminPass();
+                fecharModalInstalar();
                 const aviso = document.getElementById('modalAviso');
                 if (aviso && aviso.classList.contains('show')) fecharAviso();
                 fecharSidebar();
@@ -6180,7 +6612,6 @@
             }
         });
 
-        // Fecha a sidebar automaticamente se o usuário redimensionar para PC
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768) fecharSidebar();
         });
@@ -6196,15 +6627,14 @@
             inicializarPeriodoAlertas();
             atualizarBarraModoRegistro();
 
-            // Sessão NÃO persiste ao fechar o navegador (usa sessionStorage).
-            // Ao abrir, se houver sessão válida na ABA atual, entra direto;
-            // caso contrário, exige login.
+            // 📱 Inicializa PWA (manifesto + botão de instalação)
+            inicializarPWA();
+
             let sessaoValida = false;
             if (sessao && sessao.usuario) {
                 const u = USUARIOS_PREDEFINIDOS.find(x => x.usuario === sessao.usuario);
                 if (u) {
                     sessaoValida = true;
-                    // Garante que o sexo esteja na sessão (compatibilidade com sessões antigas)
                     if (!sessao.sexo) sessao.sexo = (u.sexo || '').trim().toUpperCase();
                 }
             }
